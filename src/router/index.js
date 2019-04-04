@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
+import InputMock from '@/components/InputMock'
 
 Vue.use(Router)
 
@@ -10,6 +11,11 @@ export default new Router({
       path: '/',
       name: 'HelloWorld',
       component: HelloWorld
+    },
+    {
+      path: '/inputMock',
+      name: 'inputMock',
+      component: InputMock
     }
   ]
 })
