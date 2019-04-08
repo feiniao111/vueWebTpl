@@ -3,12 +3,12 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 import store from './store/index'
-import App from './App'
-import router from './router'
+import App from './Demo.vue'
+import router from './router/demo'
 import LangEN from './lib/locale/lang/en'
 import LangCN from './lib/locale/lang/zh-CN'
 import axios from 'axios'
-Vue.prototype.$http = axios
+Vue.prototype.$http = axios //绑定到原型
 
 Vue.config.productionTip = false
 Vue.use(VueI18n)

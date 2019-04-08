@@ -1,3 +1,4 @@
+<!-- 原生input上传标签模拟-->
 <template>
   <label class="input_mock" :title="uploadHint">
     <span class="input_mock__button">{{$t('comp.Input.chose')}}</span>
@@ -55,8 +56,6 @@ export default {
     }
   },
   mounted() {
-    let inputDom = this.$el.querySelector('.input_mock__button--real');
-    console.log(inputDom, inputDom.files);
   }
 };
 </script>
