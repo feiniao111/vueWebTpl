@@ -1,5 +1,5 @@
 <template>
-  <div class="hello">
+  <article class="hello">
     <h1>{{ msg }}</h1>
     <h2>Essential Links</h2>
     <ul>
@@ -80,15 +80,30 @@
         </a>
       </li>
     </ul>
-  </div>
+    
+    <h2>Usage</h2>
+    <ul>
+      <li>
+        <a @click="routeTo('httpUsage')">http请求</a>
+      </li>
+      <li>
+        <a @click="routeTo('routerUsage')">router路由</a>
+      </li>
+    </ul>
+  </article>
 </template>
 
 <script>
 export default {
-  name: 'HelloWorld',
+  name: 'page1',
   data () {
     return {
       msg: 'Welcome to Your Vue.js App'
+    }
+  },
+  methods: {
+    routeTo(name) {
+      this.$router.push({name: name});
     }
   }
 }

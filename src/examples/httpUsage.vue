@@ -1,13 +1,20 @@
 <template>
   <section>
-    <button @click="handleGet">get请求</button>
-    <button @click="handlePost">post请求</button>
-    <button @click="handleReqSync">请求成功才执行下一个请求</button>
-    <button @click="handleReqConcurr">多请求并发执行,都成功后执行下一个请求</button>
-    <button @click="handleReqConcurr2">多请求并发执行,任一失败执行下一个请求</button>
-    <button @click="handleReqSeq">多请求顺序执行</button>
-    <button @click="handleGlobConfig">全局配置超时时间</button>
-    <button @click="handleInterce">请求拦截器(设置token和处理token过期)</button>
+    <h1>请求调用</h1>
+    <p>
+      <button @click="handleGet">get请求</button>
+      <button @click="handlePost">post请求</button>
+      <button @click="handleReqSync">请求成功才执行下一个请求</button>
+      <button @click="handleReqConcurr">多请求并发执行,都成功后执行下一个请求</button>
+      <button @click="handleReqConcurr2">多请求并发执行,任一失败执行下一个请求</button>
+      <button @click="handleReqSeq">多请求顺序执行</button>
+    </p>
+    
+    <h1>请求配置</h1>
+    <p>
+      <button @click="handleGlobConfig">全局配置超时时间</button>
+      <button @click="handleInterce">请求拦截器(设置token和处理token过期、超时、断网等)</button>
+    </p>
   </section>
 </template>
 
@@ -15,6 +22,8 @@
 /**
  * axios中文文档：
  * http://www.axios-js.com/zh-cn/docs/
+ * github:
+ * https://github.com/axios/axios
  */
 require("../apiMock/httpUsage");
 export default {
@@ -194,33 +203,83 @@ export default {
       // 现在，在超时前，所有请求都会等待 2.5 秒
       let timeout = window.myGlobalClosure.getTimeout();
       this.$http.defaults.timeout = timeout;
-      alert('请求超时时间设置为' + timeout/1000 + '秒');
+      alert("请求超时时间设置为" + timeout / 1000 + "秒");
     },
     handleInterce() {
       // 请求拦截器，在发送请求前，头部添加token
-      this.$http.interceptors.request.use( config => {
+      this.$http.interceptors.request.use(config => {
         let token = window.myGlobalClosure.getToken(); // 也可以用其他的方式存储,比如localStorage
         let attr = window.myGlobalClosure.getTokenAttr();
         if (token) {
           config.headers.common[attr] = token;
         }
-        
+
         return config;
-      })
+      });
 
       // 响应拦截器
-      this.$http.interceptors.response.use( res => {
-        let expireCode = window.myGlobalClosure.getTokenExpireCode(); //token过期码
-        let invalidCode = window.myGlobalClosure.getTokenInvalidCode(); //token无效码
-        if (res.data.code === expireCode || res.data.code === invalidCode) { // code字段由服务端返回
-          window.myGlobalClosure.setToken(undefined);
-          // 跳转到登录页面
-          
-        } else if (res.data.token) { //提示token需要更新
-          window.myGlobalClosure.setToken(res.data.token);
+      this.$http.interceptors.response.use(
+        res => {
+          // 在接收请求前，校验token
+          let expireCode = window.myGlobalClosure.getTokenExpireCode(); //token过期码
+          let invalidCode = window.myGlobalClosure.getTokenInvalidCode(); //token无效码
+          if (res.data.code === expireCode || res.data.code === invalidCode) {
+            // code字段由服务端返回
+            window.myGlobalClosure.setToken(undefined);
+            // 跳转到登录页面
+            // 。。。
+
+            // 如果过期不跳转而是重新请求token，可以参考这篇文章
+            // https://segmentfault.com/a/1190000016946316?utm_source=tag-newest
+          } else if (res.data.token) {
+            //提示token需要更新
+            window.myGlobalClosure.setToken(res.data.token);
+          }
+          return res;
+        },
+        err => {
+          // 处理断网、超时、服务器错误等异常
+          if (err) {
+            if (
+              err.code == "ECONNABORTED" &&
+              err.message.indexOf("timeout") != -1
+            ) {
+              // 超时
+              // 更多超时处理可以查看这篇文章
+              // https://juejin.im/post/5abe0f94518825558a06bcd9
+              alert("请求超时");
+              return Promise.reject(err);
+            } else if (err.response) {
+              // The request was made and the server responded with a status code
+              // that falls out of the range of 2xx
+              switch (err.response.status) {
+                case 404:
+                  // 资源不存在
+                  alert("请资源不存在");
+                  break;
+                default:
+                  err.data && console.log(err.data.message);
+              }
+              return Promise.reject(err);
+            } else if (err.request) {
+              // The request was made but no response was received
+              // `err.request` is an instance of XMLHttpRequest in the browser and an instance of
+              // http.ClientRequest in node.js
+              console.log(err.request);
+              return Promise.reject(err);
+            } else {
+              // Something happened in setting up the request that triggered an Error
+              console.log("Error", err.message);
+            }
+          } else {
+            // 处理断网的情况
+            alert("当前发生了断网");
+            return Promise.reject(err);
+          }
         }
-        return res;
-      })
+      );
+
+      alert('已配置拦截器');
     }
   }
 };

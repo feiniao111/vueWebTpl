@@ -1,27 +1,22 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import exampleRouter from './example.router'
+import page1Router from './pageDemo1.router'
 import InputMock from '@/components/InputMock'
-import httpUsage from '@/examples/httpUsage'
 
 Vue.use(Router)
+
+const routes = [
+  ...exampleRouter,
+  ...page1Router
+]
 
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
-    },
-    {
       path: '/inputMock',
       name: 'inputMock',
       component: InputMock
-    },
-    {
-      path: '/examples/http',
-      name: 'httpUsage',
-      component: httpUsage
     }
-  ]
+  ].concat(routes)
 })

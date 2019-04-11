@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
+    <img src="./assets/logo.png" @click="routeToHome">
     <router-view/>
   </div>
 </template>
@@ -8,6 +8,11 @@
 <script>
 export default {
   name: 'App',
+  methods: {
+    routeToHome() {
+      this.$router.push({path: '/'});
+    }
+  },
   mounted() {
     // 将实例绑定到全局闭包中
     myGlobalClosure.setVueInst(this);

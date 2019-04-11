@@ -8,6 +8,8 @@
 </template>
 
 <style lang='scss' scoped>
+// 推荐采用BEM语法
+// https://en.bem.info/
 .input_mock {
   &__button {
     padding: 3px 7.5px;

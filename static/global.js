@@ -1,52 +1,52 @@
 // 以闭包的方式，存放全局变量，防止污染
 window.myGlobalClosure = (function () {
-  var object = {
-    __vueInst: undefined, // vue示例
-    __i18nLanguage: 'chn',
-    __token: undefined,
-    __tokenAttr: 'requesttoken', // token字段
-    __tokenExpireCode: 10010, // token过期状态码, 根据服务端设置
-    __tokenInvalidCode: 10011, // token无效状态码，根据服务端设置
-    __httpTimeout: 30000, // 请求超时时间，30秒
+  var __object = {
+    vueInst: undefined, // vue示例
+    i18nLanguage: 'chn',
+    token: undefined,
+    tokenAttr: 'requesttoken', // token字段
+    tokenExpireCode: 10010, // token过期状态码, 根据服务端设置
+    tokenInvalidCode: 10011, // token无效状态码，根据服务端设置
+    httpTimeout: 5000 // 请求超时时间，5秒
   }
   return {
     // 设置vue实例
     setVueInst: function (instance) {
-      object.__vueInst = instance;
+      __object.vueInst = instance;
     },
     getVueInst: function () {
-      return object.__vueInst;
+      return __object.vueInst;
     },
     // 设置国际化语言
     setLang: function (lang) {
-      if (object.__vueInst) {
-        object.__vueInst.$store.commit("common/SET_I18N_LANGUAGE", {
-          vue: object.__vueInst,
+      if (__object.vueInst) {
+        __object.vueInst.$store.commit("common/SET_I18N_LANGUAGE", {
+          vue: __object.vueInst,
           lang: lang
         });
       }
-      object.__i18nLanguage = lang;
+      __object.i18nLanguage = lang;
     },
     getLang: function () {
-      return object.__i18nLanguage;
+      return __object.i18nLanguage;
     },
     setToken: function (token) {
-      object.__token = token;
+      __object.token = token;
     },
     getToken: function () {
-      return object.__token;
+      return __object.token;
     },
     getTokenAttr: function () {
-      return object.__tokenAttr;
+      return __object.tokenAttr;
     },
     getTimeout: function () {
-      return object.__httpTimeout;
+      return __object.httpTimeout;
     },
-    getTokenExpireCode: function() {
-        return object.__tokenExpireCode;
+    getTokenExpireCode: function () {
+      return __object.tokenExpireCode;
     },
-    getTokenInvalidCode: function() {
-        return object.__tokenInvalidCode;
+    getTokenInvalidCode: function () {
+      return __object.tokenInvalidCode;
     }
   }
 })();
