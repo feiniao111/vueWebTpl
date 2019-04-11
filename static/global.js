@@ -3,8 +3,9 @@ window.myGlobalClosure = (function () {
   var __object = {
     vueInst: undefined, // vue示例
     i18nLanguage: 'chn',
+    role: undefined,  // 角色，可用于路由拦截
     token: undefined,
-    tokenAttr: 'requesttoken', // token字段
+    tokenAttr: 'requesttoken', // token字段，可用于http请求拦截
     tokenExpireCode: 10010, // token过期状态码, 根据服务端设置
     tokenInvalidCode: 10011, // token无效状态码，根据服务端设置
     httpTimeout: 5000 // 请求超时时间，5秒
@@ -29,6 +30,12 @@ window.myGlobalClosure = (function () {
     },
     getLang: function () {
       return __object.i18nLanguage;
+    },
+    getRole: function() {
+      return __object.role;
+    },
+    setRole: function(uid) {
+      __object.role = uid;
     },
     setToken: function (token) {
       __object.token = token;

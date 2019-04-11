@@ -11,7 +11,7 @@ const routes = [
   ...page1Router
 ]
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/inputMock',
@@ -20,3 +20,28 @@ export default new Router({
     }
   ].concat(routes)
 })
+
+/** 
+ * 利用全局前置守卫，配合元信息实现路由拦截
+ *  https://router.vuejs.org/zh/guide/advanced/meta.html
+ */ 
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    // this route requires auth, check if logged in
+    // if not, redirect to login page.
+    let role = window.myGlobalClosure.getRole();
+    if (!role) {
+      alert('您还未登录');
+      next(false); // 一般情况下是跳转到登录页面
+    } else if (to.meta.role && to.meta.role != role) {
+      alert('您无权进入该页面');
+      next(false);
+    } else {
+      next()
+    }
+  } else {
+    next() // 确保一定要调用 next()
+  }
+})
+
+export default router
