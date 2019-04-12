@@ -89,6 +89,9 @@
       <li>
         <a @click="routeTo('routerUsage')">router路由</a>
       </li>
+      <li>
+        <a @click="routeTo('routerUsage')">vuex状态管理</a>
+      </li>
     </ul>
   </article>
 </template>

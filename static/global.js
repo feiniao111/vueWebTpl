@@ -31,14 +31,14 @@ window.myGlobalClosure = (function () {
     getLang: function () {
       return __object.i18nLanguage;
     },
-    getRole: function() {
+    getRole: function () {
       return __object.role;
     },
-    setRole: function(uid) {
+    setRole: function (uid) {
       __object.role = uid;
     },
     setToken: function (token) {
-      __object.token = token;
+      __object.token = token; 
     },
     getToken: function () {
       return __object.token;

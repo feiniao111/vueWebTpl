@@ -1,8 +1,8 @@
 import httpUsage from '../examples/httpUsage.vue'
 import routerUsage from '../examples/routerUsage.vue'
-import backend from '../pages/pageDemo1/page2.vue'
-import shop from '../pages/pageDemo1/page3.vue'
-import homapage from '../pages/pageDemo1/page4.vue'
+import backend from '../pages/pageDemo1/child1.vue'
+import shop from '../pages/pageDemo1/child2.vue'
+import homapage from '../pages/pageDemo1/child3.vue'
 
 export default [{
   path: '/examples',
@@ -30,7 +30,7 @@ export default [{
       path: 'homepage',
       name: 'homepage',
       component: homapage,
-      meta: {keepAlive: true, requiresAuth: true}
+      meta: {keepAlive: true, requiresAuth: true} // keepAlive 用来状态保存， requiresAuth 用于鉴权
     }]
   }]
 }]

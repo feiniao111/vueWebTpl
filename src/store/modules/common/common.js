@@ -23,7 +23,6 @@ const mutations = {
       alert('请传入正确的vue实例和语言:en | chn | turkey')
     }
     state.i18nLanguage = lang
-    window.i18nLanguage = lang
     instance.$i18n.locale = lang
     // 更新独立t函数的语言环境
     use(instance.$i18n.messages[lang])

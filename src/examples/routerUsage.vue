@@ -1,9 +1,10 @@
 <template>
   <section>
     <header>
-        <h1>请选择一个身份</h1>
-      <input type="radio" v-model="role" name="admin" value='admin'>管理员
-      <input type="radio" v-model="role" name="client" value='client'>普通用户
+      <h1>请选择一个身份</h1>
+      <label><input type="radio" v-model="role" name="admin" value='admin'>管理员</label>
+      <label><input type="radio" v-model="role" name="client" value='client'>普通用户</label>
+      <label><input type="radio" v-model="role" name="client">游客</label>    
     </header>
     <p>
         <h1>请选择进入页面</h1>
@@ -20,8 +21,9 @@
         </ul>
     </p>
     <p>
-      <h1>网页</h1>
+      <h1>子页面</h1>
       <keep-alive>
+        <!-- 这里的页面在路由离开当前页面（但还在父路由中）时，将存入内存中，状态不丢失 -->
         <router-view v-if="$route.meta.keepAlive"></router-view>
       </keep-alive>
       <router-view v-if="!$route.meta.keepAlive"></router-view>
