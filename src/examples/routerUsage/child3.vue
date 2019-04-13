@@ -1,8 +1,8 @@
 <template>
   <section>
-    这里是个人主页
+    {{$t('page.examples.homePage')}}
     <p>
-      <input placeholder="页面内切换，输入不丢失">
+      <input :placeholder="$t('page.examples.placeholder')">
     </p>
   </section>
 </template>

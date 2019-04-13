@@ -1,5 +1,5 @@
 <template>
-  <section>这里是商城</section>
+  <section>{{$t('page.examples.backendPage')}}</section>
 </template>
 
 <script>

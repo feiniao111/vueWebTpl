@@ -1,19 +1,19 @@
 <template>
   <section>
-    <h1>请求调用</h1>
+    <h1>{{$t('page.examples.reqCall')}}</h1>
     <p>
-      <button @click="handleGet">get请求</button>
-      <button @click="handlePost">post请求</button>
-      <button @click="handleReqSync">请求成功才执行下一个请求</button>
-      <button @click="handleReqConcurr">多请求并发执行,都成功后执行下一个请求</button>
-      <button @click="handleReqConcurr2">多请求并发执行,任一失败执行下一个请求</button>
-      <button @click="handleReqSeq">多请求顺序执行</button>
+      <button @click="handleGet">{{$t('page.examples.getReq')}}</button>
+      <button @click="handlePost">{{$t('page.examples.postReq')}}</button>
+      <button @click="handleReqSync">{{$t('page.examples.req1by1')}}</button>
+      <button @click="handleReqConcurr">{{$t('page.examples.reqAllby1')}}</button>
+      <button @click="handleReqConcurr2">{{$t('page.examples.req1by1f')}}</button>
+      <button @click="handleReqSeq">{{$t('page.examples.reqSeq')}}</button>
     </p>
     
-    <h1>请求配置</h1>
+    <h1>{{$t('page.examples.reqConf')}}</h1>
     <p>
-      <button @click="handleGlobConfig">全局配置超时时间</button>
-      <button @click="handleInterce">请求拦截器(设置token和处理token过期、超时、断网等)</button>
+      <button @click="handleGlobConfig">{{$t('page.examples.globalTimeout')}}</button>
+      <button @click="handleInterce">{{$t('page.examples.reqInteceptor')}}</button>
     </p>
   </section>
 </template>
@@ -146,7 +146,7 @@ export default {
           this.$http
             .get("/price?product=" + product)
             .then(res => {
-              alert(product + "的价格是:" + res.data.price);
+              alert(this.$t('page.examples.goodPrice', {product: product, price: res.data.price}));
               resolve(res.data.price);
             })
             .catch(err => {
@@ -160,7 +160,7 @@ export default {
           this.$http
             .get("/num?product=" + product)
             .then(res => {
-              alert(product + "的数量是:" + res.data.num);
+              alert(this.$t('page.examples.goodNum', {product: product, num: res.data.num}));
               resolve(res.data.num);
             })
             .catch(err => {
@@ -171,7 +171,7 @@ export default {
       };
 
       let getRate = product => {
-        alert(product + "的利率是" + 1.1);
+        alert(this.$t('page.examples.goodRate', {product: product, rate: 1.1}));
         return 1.1;
       };
 
@@ -191,8 +191,8 @@ export default {
 
       calTotal("melon")
         .then(res => {
-          alert("总价是" + res);
-          console.log("总价是" + res);
+          alert(this.$t('page.examples.totalPrice', {price: res}));
+          console.log(this.$t('page.examples.totalPrice', {price: res}));
         })
         .catch(err => {
           console.log(err);
@@ -203,7 +203,7 @@ export default {
       // 现在，在超时前，所有请求都会等待 2.5 秒
       let timeout = window.myGlobalClosure.getTimeout();
       this.$http.defaults.timeout = timeout;
-      alert("请求超时时间设置为" + timeout / 1000 + "秒");
+      alert(this.$t('page.examples.timeoutSet', {second: timeout / 1000}));
     },
     handleInterce() {
       // 请求拦截器，在发送请求前，头部添加token
@@ -247,7 +247,7 @@ export default {
               // 超时
               // 更多超时处理可以查看这篇文章
               // https://juejin.im/post/5abe0f94518825558a06bcd9
-              alert("请求超时");
+              alert(this.$t('page.examples.reqTimeout'));
               return Promise.reject(err);
             } else if (err.response) {
               // The request was made and the server responded with a status code
@@ -255,7 +255,7 @@ export default {
               switch (err.response.status) {
                 case 404:
                   // 资源不存在
-                  alert("请资源不存在");
+                  alert(this.$t('page.examples.sourceNoExist'));
                   break;
                 default:
                   err.data && console.log(err.data.message);
@@ -273,13 +273,13 @@ export default {
             }
           } else {
             // 处理断网的情况
-            alert("当前发生了断网");
+            alert(this.$t('page.examples.offline'));
             return Promise.reject(err);
           }
         }
       );
 
-      alert('已配置拦截器');
+      alert(this.$t('page.examples.setInteceptor'));
     }
   }
 };

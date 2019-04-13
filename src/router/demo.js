@@ -1,13 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import exampleRouter from './example.router'
 import page1Router from './pageDemo1.router'
 import InputMock from '@/components/InputMock'
+import {t} from '../lib/locale/index'
 
 Vue.use(Router)
 
 const routes = [
-  ...exampleRouter,
   ...page1Router
 ]
 
@@ -36,10 +35,14 @@ router.beforeEach((to, from, next) => {
     // if not, redirect to login page.
     let role = window.myGlobalClosure.getRole();
     if (!role) {
-      alert('您还未登录')
-      next(false) // 一般情况下是跳转到登录页面
+      alert(t('page.examples.accessDeny'))
+      next(to.fullPath.includes('/router') ? {
+        name: 'routerUsageLogin'
+      } : {
+        name: 'vuexUsageLogin'
+      }) // 一般情况下是跳转到登录页面
     } else if (to.meta.role && to.meta.role !== role) {
-      alert('您无权进入该页面')
+      alert(t('page.examples.accessNotAuthor'))
       next(false)
     } else {
       next()

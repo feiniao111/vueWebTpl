@@ -4,11 +4,11 @@
 import * as types from '../../mutation-types'
 import Account from '../../../api/pageDemo1/pageDemo1'
 const state = {
-    pageDemo1Value: 0
+    pageDemo1Value: 0,
 };
 
 const getters = {
-    getPageDemo1Value:state=>state.pageDemo1Value
+    getPageDemo1Value:state=>state.pageDemo1Value,
 };
 
 const actions = {

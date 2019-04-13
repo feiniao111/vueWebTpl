@@ -1,5 +1,5 @@
 <template>
-  <section>这里是后台管理页面</section>
+  <section>{{$t('page.examples.shopMallPage')}}</section>
 </template>
 
 <script>

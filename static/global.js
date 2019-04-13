@@ -1,4 +1,11 @@
-// 以闭包的方式，存放全局变量，防止污染
+/** 
+ * 以闭包的方式，存放全局变量，防止污染。
+ *  这里存放的数据，一般是以下情形之一:
+ *    —— 全局使用到的常量（不修改，没必要放入vuex中；如果仅某个.vue使用的常量，写在该文件中）
+ *    —— 变量用于vuex无法覆盖到的地方（ES5的js、jq插件，和cef的C++端交互等）
+ *  仅允许使用get和set方法访问数据！
+ */ 
+
 window.myGlobalClosure = (function () {
   var __object = {
     vueInst: undefined, // vue示例
