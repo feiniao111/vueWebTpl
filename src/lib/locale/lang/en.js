@@ -1,8 +1,5 @@
 export default {
   comp: { // block-level component
-    HelloWorld: {
-      msg: 'Welcome to vue template of CM Web'
-    },
     Input: {
       chose: 'Select File',
       unchosen: 'No file is selected.'
@@ -57,7 +54,8 @@ export default {
       chn: 'Chinese',
       httpReq: 'Http request',
       routers: 'Router usage',
-      vuexManage: 'Vuex management'
+      vuexManage: 'Vuex management',
+      internation: 'internation'
     }
   }
 }

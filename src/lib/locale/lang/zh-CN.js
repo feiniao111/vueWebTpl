@@ -1,8 +1,5 @@
 export default {
   comp: { // 块级组件
-    HelloWorld: {
-      msg: '欢迎使用vue项目模板'
-    },
     Input: {
       chose: '选择文件',
       unchosen: '未选择任何文件'
@@ -50,7 +47,7 @@ export default {
       offline: '当前发生了断网',
       setInteceptor: '已配置拦截器',
       accessDeny: '您还未登录，无法访问',
-      accessNotAuthor: '您无权进入该页面'
+      accessNotAuthor: '您无权进入该页面',
     },
     pageDemo1: {
       en: '英语',
@@ -58,6 +55,7 @@ export default {
       httpReq: 'http请求',
       routers: 'router路由',
       vuexManage: 'vuex状态管理',
+      internation: '国际化'
     }
   }
 }
