@@ -20,6 +20,7 @@ let i18nHandler = function() {
   }
 };
 
+// 暴露给js、jq插件使用
 export const t = function(path, options) {
   let value = i18nHandler.apply(this, arguments);
   if (value !== null && value !== undefined) return value;

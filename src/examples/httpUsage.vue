@@ -25,7 +25,9 @@
  * github:
  * https://github.com/axios/axios
  */
-require("../apiMock/httpUsage");
+import api from '../api/examples/httpUsage.js'
+import config from '../api/config.js'
+require("../apiMock/examples/httpUsage");
 export default {
   name: "httpUsage",
   data() {
@@ -33,8 +35,7 @@ export default {
   },
   methods: {
     handleGet() {
-      this.$http
-        .get("https://api.github.com/")
+      api.getGithub()
         .then(res => {
           // 请求成功返回
           console.log(res);
@@ -46,11 +47,7 @@ export default {
         });
     },
     handlePost() {
-      this.$http
-        .post("/postReq1", {
-          key1: "value1",
-          key2: "value2"
-        })
+      api.getPaginationData()
         .then(res => {
           // 请求成功返回
           console.log(res);
@@ -63,17 +60,13 @@ export default {
     },
     handleReqSync() {
       let loginInfoFuc = () => {
-        this.$http.get("/loginInfo").then(res => {
+        api.getLoginInfo().then(res => {
           console.log(res);
           alert(JSON.stringify(res.data));
         });
       };
 
-      this.$http
-        .post("/login", {
-          user: "xiaoming",
-          password: "123456"
-        })
+      api.login()
         .then(res => {
           // 请求成功返回
           console.log(res);
@@ -88,16 +81,8 @@ export default {
         });
     },
     handleReqConcurr() {
-      let getUserAccount = () => {
-        return this.$http.get("/user/12345");
-      };
-
-      let getUserPermissions = () => {
-        return this.$http.get("/user/12345/permissions");
-      };
-
       this.$http
-        .all([getUserAccount(), getUserPermissions()])
+        .all([api.getUserAccount(), api.getUserPermissions()])
         .then(
           // 注意 getUserAccount() 和getUserPermissions()，执行无顺序关系
           this.$http.spread(function(act, perms) {
@@ -113,20 +98,8 @@ export default {
         });
     },
     handleReqConcurr2() {
-      let getUserAccount = () => {
-        return this.$http.get("/user/12345");
-      };
-
-      let getUserPermissions = () => {
-        return this.$http.get("/user/12345/permissions");
-      };
-
-      let getBaidu = () => {
-        return this.$http.get("http://www.baidu.com");
-      };
-
       this.$http
-        .all([getUserAccount(), getUserPermissions(), getBaidu()])
+        .all([api.getUserAccount(), api.getUserPermissions(), api.getBaidu()])
         .then(
           this.$http.spread(function(act, perms) {
             // 两个请求现在都执行成功
@@ -143,8 +116,7 @@ export default {
     handleReqSeq() {
       let getPrice = product => {
         return new Promise((resolve, reject) => {
-          this.$http
-            .get("/price?product=" + product)
+          api.getPrice(product)  
             .then(res => {
               alert(this.$t('page.examples.goodPrice', {product: product, price: res.data.price}));
               resolve(res.data.price);
@@ -157,8 +129,7 @@ export default {
       };
       let getNum = product => {
         return new Promise((resolve, reject) => {
-          this.$http
-            .get("/num?product=" + product)
+          api.getNum(product)  
             .then(res => {
               alert(this.$t('page.examples.goodNum', {product: product, num: res.data.num}));
               resolve(res.data.num);
@@ -171,8 +142,15 @@ export default {
       };
 
       let getRate = product => {
-        alert(this.$t('page.examples.goodRate', {product: product, rate: 1.1}));
-        return 1.1;
+        return new Promise((resolve, reject) => {
+          api.getRate(product).then(res => {
+            alert(this.$t('page.examples.goodRate', {product: product, rate: res}));
+            resolve(res);
+          }).catch(err => {
+              console.log(err);
+              reject(err);
+            });
+        })
       };
 
       /**async和await的用法，可以查看这篇文章
@@ -199,87 +177,12 @@ export default {
         });
     },
     handleGlobConfig() {
-      // 覆写库的超时默认值
-      // 现在，在超时前，所有请求都会等待 2.5 秒
-      let timeout = window.myGlobalClosure.getTimeout();
-      this.$http.defaults.timeout = timeout;
-      alert(this.$t('page.examples.timeoutSet', {second: timeout / 1000}));
+      config.handleGlobConfig();
+      alert(this.$t('page.examples.setSucc'));
     },
     handleInterce() {
-      // 请求拦截器，在发送请求前，头部添加token
-      this.$http.interceptors.request.use(config => {
-        let token = window.myGlobalClosure.getToken(); // 也可以用其他的方式存储,比如localStorage
-        let attr = window.myGlobalClosure.getTokenAttr();
-        if (token) {
-          config.headers.common[attr] = token;
-        }
-
-        return config;
-      });
-
-      // 响应拦截器
-      this.$http.interceptors.response.use(
-        res => {
-          // 在接收请求前，校验token
-          let expireCode = window.myGlobalClosure.getTokenExpireCode(); //token过期码
-          let invalidCode = window.myGlobalClosure.getTokenInvalidCode(); //token无效码
-          if (res.data.code === expireCode || res.data.code === invalidCode) {
-            // code字段由服务端返回
-            window.myGlobalClosure.setToken(undefined);
-            // 跳转到登录页面
-            // 。。。
-
-            // 如果过期不跳转而是重新请求token，可以参考这篇文章
-            // https://segmentfault.com/a/1190000016946316?utm_source=tag-newest
-          } else if (res.data.token) {
-            //提示token需要更新
-            window.myGlobalClosure.setToken(res.data.token);
-          }
-          return res;
-        },
-        err => {
-          // 处理断网、超时、服务器错误等异常
-          if (err) {
-            if (
-              err.code == "ECONNABORTED" &&
-              err.message.indexOf("timeout") != -1
-            ) {
-              // 超时
-              // 更多超时处理可以查看这篇文章
-              // https://juejin.im/post/5abe0f94518825558a06bcd9
-              alert(this.$t('page.examples.reqTimeout'));
-              return Promise.reject(err);
-            } else if (err.response) {
-              // The request was made and the server responded with a status code
-              // that falls out of the range of 2xx
-              switch (err.response.status) {
-                case 404:
-                  // 资源不存在
-                  alert(this.$t('page.examples.sourceNoExist'));
-                  break;
-                default:
-                  err.data && console.log(err.data.message);
-              }
-              return Promise.reject(err);
-            } else if (err.request) {
-              // The request was made but no response was received
-              // `err.request` is an instance of XMLHttpRequest in the browser and an instance of
-              // http.ClientRequest in node.js
-              console.log(err.request);
-              return Promise.reject(err);
-            } else {
-              // Something happened in setting up the request that triggered an Error
-              console.log("Error", err.message);
-            }
-          } else {
-            // 处理断网的情况
-            alert(this.$t('page.examples.offline'));
-            return Promise.reject(err);
-          }
-        }
-      );
-
-      alert(this.$t('page.examples.setInteceptor'));
+      config.handleInterce();
+      alert(this.$t('page.examples.setSucc'));
     }
   }
 };
