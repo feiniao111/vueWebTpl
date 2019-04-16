@@ -7,6 +7,7 @@ export default {
     button: {
       login: '登录',
       logout: '退出',
+      confirm: '确定'
     }
   },
   page: { // 页面级组件
@@ -43,6 +44,7 @@ export default {
       totalPrice: '总价是{price}',
       timeoutSet: '请求超时时间设置为{second}秒',
       reqTimeout: '请求超时',
+      setSucc: '设置成功',
       sourceNoExist: '请求资源不存在',
       offline: '当前发生了断网',
       setInteceptor: '已配置拦截器',

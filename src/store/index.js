@@ -8,10 +8,12 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import common from './modules/common/common';
+import pageDemo1 from './modules/pageDemo1/pageDemo1'
 Vue.use(Vuex);
 const store = new Vuex.Store({
     modules: {
         common,
+        pageDemo1
     },
     strict: process.env.NODE_ENV !== 'production'
 });

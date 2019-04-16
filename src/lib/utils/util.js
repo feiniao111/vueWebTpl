@@ -185,3 +185,25 @@ export function debounce(fn, delay) {
     }, delay);
   }
 }
+
+export function throttle(fn, threshold) {
+  let timeout;
+  var start = new Date;
+  threshold = threshold || 160
+  return function() {
+    let context = this;
+    let args = arguments;
+    let curr = new Date() - 0;
+    clearTimeout(timeout) // 总是干掉事件回调
+    if (curr - start >= threshold) {
+      console.log('---节流函数，执行---');
+      fn.apply(context, args);
+      start = curr;
+    } else {
+      // 让方法在脱离事件后也能执行一次
+      timeout = setTimeout(function() {
+        fn.apply(context, args)
+      }, threshold);
+    }
+  }
+}

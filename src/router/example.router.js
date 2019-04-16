@@ -1,15 +1,17 @@
-import httpUsage from '../examples/httpUsage.vue'
-import login from '../examples/routerUsage/login.vue'
-import shopmall from '../examples/routerUsage/shopMall.vue'
-import backend from '../examples/routerUsage/child1.vue'
-import shop from '../examples/routerUsage/child2.vue'
-import homapage from '../examples/routerUsage/child3.vue'
+// 懒加载路由，不影响实际加载性能
+// https://router.vuejs.org/zh/guide/advanced/lazy-loading.html#%E6%8A%8A%E7%BB%84%E4%BB%B6%E6%8C%89%E7%BB%84%E5%88%86%E5%9D%97
+const httpUsage = () => import('../examples/httpUsage.vue')
+const login = () => import('../examples/routerUsage/login.vue')
+const shopmall = () => import('../examples/routerUsage/shopMall.vue')
+const backend = () => import('../examples/routerUsage/child1.vue')
+const shop = () => import('../examples/routerUsage/child2.vue')
+const homapage = () => import('../examples/routerUsage/child3.vue')
 
-import vLogin from '../examples/vuexUsage/vLogin.vue'
-import vShopmall from '../examples/vuexUsage/vShopMall.vue'
-import vBackend from '../examples/vuexUsage/vChild1.vue'
-import vShop from '../examples/vuexUsage/vChild2.vue'
-import vHomapage from '../examples/vuexUsage/vChild3.vue'
+const vLogin = () => import('../examples/vuexUsage/vLogin.vue')
+const vShopmall = () => import('../examples/vuexUsage/vShopMall.vue')
+const vBackend = () => import('../examples/vuexUsage/vChild1.vue')
+const vShop = () => import('../examples/vuexUsage/vChild2.vue')
+const vHomapage = () => import('../examples/vuexUsage/vChild3.vue')
 
 export default [{
   path: '/examples',

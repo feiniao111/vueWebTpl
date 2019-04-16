@@ -8,7 +8,7 @@ import router from './router'
 import LangEN from './lib/locale/lang/en'
 import LangCN from './lib/locale/lang/zh-CN'
 import axios from 'axios'
-Vue.prototype.$http = axios
+Vue.prototype.$http = axios // 绑定到原型
 
 Vue.config.productionTip = false
 Vue.use(VueI18n)

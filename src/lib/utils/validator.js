@@ -1,7 +1,6 @@
 import {
   t
 } from '../locale/index';
-import backManage from '../../../primary/api/backmanage/backmanage';
 
 /**
  * 策略

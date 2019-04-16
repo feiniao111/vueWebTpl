@@ -2,23 +2,31 @@
   <section>
     {{$t('page.examples.homePage2', {username: getUsername})}}
     <p>
-      <input :placeholder="$t('page.examples.placeholder')">
+      <h2>昵称修改</h2>
+      <input v-model='newname'>
+      <button @click='handleRename'>{{$t('comp.button.confirm')}}</button>
     </p>
   </section>
 </template>
 
 <script>
+require('../../apiMock/examples/vuexUsage')
 import {mapGetters} from 'vuex'
 export default {
   data() {
     return {
-
+      newname: ''
     }
   },
   computed: {
     ...mapGetters([
       'getUsername'
     ])
+  },
+  methods: {
+    handleRename() {
+      this.$store.dispatch('editNickname', {name: this.newname});
+    }
   }
 };
 </script>

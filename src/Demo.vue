@@ -2,13 +2,14 @@
   <article id="app">
     <header>
       <img src="./assets/logo.png" @click="routeToHome">
+      <aside class="usage-demo__aside">
+        <select v-model="lang">
+          <option value="en">{{$t('page.pageDemo1.en')}}</option>
+          <option value="chn">{{$t('page.pageDemo1.chn')}}</option>
+        </select>
+      </aside>
     </header>
-    <aside class="usage-demo__aside">
-      <select v-model="lang">
-        <option value="en">{{$t('page.pageDemo1.en')}}</option>
-        <option value="chn">{{$t('page.pageDemo1.chn')}}</option>
-      </select>
-    </aside>
+
     <router-view/>
   </article>
 </template>
@@ -25,8 +26,7 @@ export default {
   data() {
     return {
       lang: "chn"
-    }
-    
+    };
   },
   computed: {
     ...mapGetters(["i18nLanguage"])

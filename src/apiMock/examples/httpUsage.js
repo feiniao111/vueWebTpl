@@ -1,5 +1,7 @@
 /**
- * demo api请求文件Mock
+ * demo api请求Mock
+ * mockjs官方文档：
+ * https://github.com/nuysoft/Mock
  */
 var Mock = require('mockjs');
 //拦截url,返回模拟数据

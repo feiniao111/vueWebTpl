@@ -44,6 +44,7 @@ export default {
       timeoutSet: 'Request timeout is set to {second} seconds.',
       reqTimeout: 'Request timed out.',
       sourceNoExist: 'Request resource does not exist.',
+      setSucc: 'Set succeed.',
       offline: 'The current network has broken.',
       setInteceptor: 'Interceptor configured.',
       accessDeny: 'You are not logged in and cannot access.',
