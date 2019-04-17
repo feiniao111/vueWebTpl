@@ -1,3 +1,5 @@
+
+
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
@@ -9,7 +11,6 @@ import LangEN from './lib/locale/lang/en'
 import LangCN from './lib/locale/lang/zh-CN'
 import axios from 'axios'
 Vue.prototype.$http = axios // 绑定到原型
-
 Vue.config.productionTip = false
 Vue.use(VueI18n)
 

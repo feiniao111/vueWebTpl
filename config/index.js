@@ -44,7 +44,7 @@ module.exports = {
 
   build: {
     // Template for index.html
-    demo: path.resolve(__dirname, '../webapp/index.html'),
+    index: path.resolve(__dirname, '../webapp/index.html'),
 
     // Paths
     assetsRoot: path.resolve(__dirname, '../webapp'),

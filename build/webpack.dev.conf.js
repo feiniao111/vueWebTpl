@@ -10,6 +10,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
 const definedVar = 'vueWebTpl' // 动态配置根路径
+const env = require('../config/dev.env')
+const definedEnv = env.NODE_ENV // 'development'
 
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
@@ -63,7 +65,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       filename: 'index.html',
       template: 'index.html',
       inject: true,
-      definedVar:definedVar
+      definedVar: definedVar,
+      definedEnv: definedEnv
     }),
     // copy custom static assets
     new CopyWebpackPlugin([{

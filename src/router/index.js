@@ -5,18 +5,20 @@ import InputMock from '@/components/InputMock'
 import {t} from '../lib/locale/index'
 
 Vue.use(Router)
-
-const routes = [
-  ...page1Router
-]
-
-const router = new Router({
-  mode: 'hash', // history的url更友好，但服务端需要相应设置
-  routes: [{
+// production
+let env = window.myGlobalClosure.getEnv();
+const routes = env != 'production' ? [
+  {
     path: '/inputMock',
     name: 'inputMock',
     component: InputMock
-  }].concat(routes),
+  },
+  ...page1Router
+] : []
+
+const router = new Router({
+  mode: 'hash', // history的url更友好，但服务端需要相应设置
+  routes: routes,
   scrollBehavior (to, from, savedPosition) { // 路由切换时，滚动条回到顶部
     return {
       x: 0,
