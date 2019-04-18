@@ -13,13 +13,14 @@ const vBackend = () => import('../examples/vuexUsage/vChild1.vue')
 const vShop = () => import('../examples/vuexUsage/vChild2.vue')
 const vHomapage = () => import('../examples/vuexUsage/vChild3.vue')
 
+const internUsage = () => import('../examples/internationUsage.vue')
+
 export default [{
   path: '/examples',
   component: {
     template: '<article><router-view></router-view></article>'
   },
-  children: [
-    {
+  children: [{
       path: 'http',
       name: 'httpUsage',
       component: httpUsage
@@ -33,12 +34,14 @@ export default [{
       path: 'router',
       name: 'routerUsage',
       component: shopmall,
-      children: [
-        {
+      children: [{
           path: 'backend',
           name: 'backend',
           component: backend,
-          meta: { requiresAuth: true, role: 'admin' }
+          meta: {
+            requiresAuth: true,
+            role: 'admin'
+          }
         },
         {
           path: 'shop',
@@ -49,7 +52,10 @@ export default [{
           path: 'homepage',
           name: 'homepage',
           component: homapage,
-          meta: { keepAlive: true, requiresAuth: true } // keepAlive 用来状态保存， requiresAuth 用于鉴权
+          meta: {
+            keepAlive: true,
+            requiresAuth: true
+          } // keepAlive 用来状态保存， requiresAuth 用于鉴权
         }
       ]
     },
@@ -62,12 +68,14 @@ export default [{
       path: 'vuex',
       name: 'vuexUsage',
       component: vShopmall,
-      children: [
-        {
+      children: [{
           path: 'vBackend',
           name: 'vBackend',
           component: vBackend,
-          meta: { requiresAuth: true, role: 'admin' }
+          meta: {
+            requiresAuth: true,
+            role: 'admin'
+          }
         },
         {
           path: 'vShop',
@@ -78,8 +86,17 @@ export default [{
           path: 'vHomepage',
           name: 'vHomepage',
           component: vHomapage,
-          meta: { keepAlive: true, requiresAuth: true } // keepAlive 用来状态保存， requiresAuth 用于鉴权
+          meta: {
+            keepAlive: true,
+            requiresAuth: true
+          } // keepAlive 用来状态保存， requiresAuth 用于鉴权
         }
       ]
-    }]
+    },
+    {
+      path: 'internUsage',
+      name: 'internUsage',
+      component: internUsage
+    }
+  ]
 }]

@@ -48,7 +48,9 @@ export default {
       offline: 'The current network has broken.',
       setInteceptor: 'Interceptor configured.',
       accessDeny: 'You are not logged in and cannot access.',
-      accessNotAuthor: 'You are not authorized to access this page.'
+      accessNotAuthor: 'You are not authorized to access this page.',
+      onekeyExportChn: 'One-click export of Chinese language pack',
+      genLangFile: 'Generate language files based on language packs'
     },
     pageDemo1: {
       en: 'English',

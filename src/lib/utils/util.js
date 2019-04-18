@@ -1,3 +1,5 @@
+import XLSX from "xlsx/dist/xlsx.core.min.js";
+
 const hasOwnProperty = Object.prototype.hasOwnProperty;
 export function hasOwn(obj, key) {
   return hasOwnProperty.call(obj, key);
@@ -11,7 +13,7 @@ function extend(to, _from) {
 };
 
 export function toObject(arr) {
-  var res = {};
+  let res = {};
   for (let i = 0; i < arr.length; i++) {
     if (arr[i]) {
       extend(res, arr[i]);
@@ -35,17 +37,17 @@ export function banMove() {
  * @returns
  */
 export function banBackSpace(e) {
-  var ev = e || window.event;
+  let ev = e || window.event;
   // 各种浏览器下获取事件对象
-  var obj = ev.relatedTarget || ev.srcElement || ev.target || ev.currentTarget;
+  let obj = ev.relatedTarget || ev.srcElement || ev.target || ev.currentTarget;
   // 按下Backspace键
   if (ev.keyCode == 8) {
-    var tagName = obj.nodeName; // 标签名称
+    let tagName = obj.nodeName; // 标签名称
     // 如果标签不是input或者textarea则阻止Backspace
     if (tagName != 'INPUT' && tagName != 'TEXTAREA') {
       return stopIt(ev);
     }
-    var tagType = obj.type.toUpperCase(); // 标签类型
+    let tagType = obj.type.toUpperCase(); // 标签类型
     // input标签除了下面几种类型，全部阻止Backspace
     if (tagName == 'INPUT' && (tagType != 'TEXT' && tagType != 'TEXTAREA' && tagType != 'PASSWORD')) {
       return stopIt(ev);
@@ -140,19 +142,19 @@ export function htmlTruncate(html, limit) {
 //传入图片路径，返回base64
 export function getBase64(img) {
   function getBase64Image(img, width, height) { //width、height调用时传入具体像素值，控制大小 ,不传则默认图像大小
-    var canvas = document.createElement("canvas");
+    let canvas = document.createElement("canvas");
     canvas.width = width ? width : img.width;
     canvas.height = height ? height : img.height;
 
-    var ctx = canvas.getContext("2d");
+    let ctx = canvas.getContext("2d");
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    var dataURL = canvas.toDataURL();
+    let dataURL = canvas.toDataURL();
     return dataURL;
   }
-  var image = new Image();
+  let image = new Image();
   image.crossOrigin = '';
   image.src = img;
-  var deferred = $.Deferred();
+  let deferred = $.Deferred();
   if (img) {
     image.onload = function () {
       deferred.resolve(getBase64Image(image)); //将base64传给done上传处理
@@ -163,7 +165,7 @@ export function getBase64(img) {
 
 // 替换字符串中所有空格(包括中间空格,需要设置第2个参数为:g) 为_, 除去所有非_符号
 export function Trim(str, is_global) {
-  var result;
+  let result;
   result = str.replace(/(^\s+)|(\s+$)/g, "_");
   if (is_global.toLowerCase() == "g") {
     result = result.replace(/\s/g, "_");
@@ -175,7 +177,7 @@ export function Trim(str, is_global) {
 export function debounce(fn, delay) {
   delay = delay || 160;
   let timeout;
-  return function() {
+  return function () {
     let args = arguments;
     let context = this;
     clearTimeout(timeout);
@@ -188,9 +190,9 @@ export function debounce(fn, delay) {
 
 export function throttle(fn, threshold) {
   let timeout;
-  var start = new Date;
+  let start = new Date;
   threshold = threshold || 160
-  return function() {
+  return function () {
     let context = this;
     let args = arguments;
     let curr = new Date() - 0;
@@ -201,9 +203,55 @@ export function throttle(fn, threshold) {
       start = curr;
     } else {
       // 让方法在脱离事件后也能执行一次
-      timeout = setTimeout(function() {
+      timeout = setTimeout(function () {
         fn.apply(context, args)
       }, threshold);
     }
   }
+}
+
+/**
+ * 将json数据扁平化，多层的key以.拼接成一个
+ * @param {} jsonObj 
+ * @param {*} keyPrefix 
+ * @param {*} result 
+ */
+export function joint(jsonObj, keyPrefix = '', result = {}) {
+  for (let word in jsonObj) {
+    let tmp = keyPrefix
+    tmp === '' ? tmp = word : tmp += ('.' + word)
+    let value = jsonObj[word]
+    if (typeof (value) === 'string') {
+      result[tmp] = value
+    } else {
+      joint(value, tmp, result)
+    }
+  }
+}
+
+// 将一个sheet转成最终的excel文件的blob对象，然后利用URL.createObjectURL下载
+export function sheet2blob(sheet, sheetName = 'sheet1') {
+  let workbook = {
+    SheetNames: [sheetName],
+    Sheets: {}
+  };
+  workbook.Sheets[sheetName] = sheet;
+  // 生成excel的配置项
+  let wopts = {
+    bookType: 'xlsx', // 要生成的文件类型
+    bookSST: false, // 是否生成Shared String Table，官方解释是，如果开启生成速度会下降，但在低版本IOS设备上有更好的兼容性
+    type: 'binary'
+  };
+  let wbout = XLSX.write(workbook, wopts);
+  let blob = new Blob([s2ab(wbout)], {
+    type: "application/octet-stream"
+  });
+  // 字符串转ArrayBuffer
+  function s2ab(s) {
+    let buf = new ArrayBuffer(s.length);
+    let view = new Uint8Array(buf);
+    for (let i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+    return buf;
+  }
+  return blob;
 }

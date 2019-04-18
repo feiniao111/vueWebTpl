@@ -50,6 +50,9 @@ export default {
       setInteceptor: '已配置拦截器',
       accessDeny: '您还未登录，无法访问',
       accessNotAuthor: '您无权进入该页面',
+      internationDoc: 'vue框架下的国际化处理',
+      onekeyExportChn: '一键导出中文语言包',
+      genLangFile: '根据语言包生成语言文件'
     },
     pageDemo1: {
       en: '英语',

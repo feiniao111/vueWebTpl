@@ -16,7 +16,7 @@
           <a @click="routeTo('vuexUsageLogin')">{{$t('page.pageDemo1.vuexManage')}}</a>
         </li>
         <li>
-          <a href="https://feiniao111.github.io/2019/02/04/vue/vue%E6%A1%86%E6%9E%B6%E4%B8%8B%E7%9A%84%E5%9B%BD%E9%99%85%E5%8C%96-md/" target='__blank'>{{$t('page.pageDemo1.internation')}}</a>
+          <a @click="routeTo('internUsage')">{{$t('page.pageDemo1.internation')}}</a>
         </li>
       </ul>
     </section>
