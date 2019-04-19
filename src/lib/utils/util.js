@@ -174,6 +174,7 @@ export function Trim(str, is_global) {
   return result;
 }
 
+// 防抖
 export function debounce(fn, delay) {
   delay = delay || 160;
   let timeout;
@@ -188,6 +189,7 @@ export function debounce(fn, delay) {
   }
 }
 
+// 节流
 export function throttle(fn, threshold) {
   let timeout;
   let start = new Date;
@@ -230,6 +232,8 @@ export function joint(jsonObj, keyPrefix = '', result = {}) {
 }
 
 // 将一个sheet转成最终的excel文件的blob对象，然后利用URL.createObjectURL下载
+// sheetJS:
+// https://github.com/SheetJS/js-xlsx/tree/master/demos/vue
 export function sheet2blob(sheet, sheetName = 'sheet1') {
   let workbook = {
     SheetNames: [sheetName],
@@ -254,4 +258,87 @@ export function sheet2blob(sheet, sheetName = 'sheet1') {
     return buf;
   }
   return blob;
+}
+
+export function downExcel(blob, exportName = '语言包.xlsx') {
+  let url = URL.createObjectURL(blob); // 创建blob地址
+  let aLink = document.createElement("a");
+  aLink.href = url;
+  aLink.download = exportName; // HTML5新增的属性，指定保存文件名，可以不要后缀，注意，file:///模式下不会生效
+  let event;
+  if (window.MouseEvent) event = new MouseEvent("click");
+  else {
+    event = document.createEvent("MouseEvents");
+    event.initMouseEvent(
+      "click",
+      true,
+      false,
+      window,
+      0,
+      0,
+      0,
+      0,
+      0,
+      false,
+      false,
+      false,
+      false,
+      0,
+      null
+    );
+  }
+  aLink.dispatchEvent(event);
+}
+
+/**
+ * sheetData格式像下面这样, 至少要有v属性
+ * {
+ *   ！ref: 'A1:C3',
+ *    A1: {t: 's', v: '字段', h: '字段', w: '字段'},
+ *    A2: {t: 's', v: 'comp.Input.chose', h: 'comp.Input.chose', w: 'comp.Input.chose'},
+ *    A3: {t: 's', v: 'comp.Input.unchosen', h: 'comp.Input.unchosen', w: 'comp.Input.unchosen'},
+ *    B1： {t: "s", v: "中文", h: "中文", w: "中文"},
+ *    B2: {t: "s", v: "选择文件", h: "选择文件", w: "选择文件"},
+ *    B3: {t: "s", v: "未选择任何文件", h: "未选择任何文件", w: "未选择任何文件"},
+ *    C1: {t: "s", v: "英文", h: "英文", w: "英文"},
+ *    C2: {t: "s", v: "Select File", h: "Select File", w: "Select File"},
+ *    C3: {t: "s", v: "No file is selected.", h: "No file is selected.", w: "No file is selected."}
+ * }
+ * @export
+ * @param {*} sheetData
+ */
+export function parseExcel(sheetData) {
+  let chnJson = {}
+  let enJson = {}
+  for (let key in sheetData) {
+    if (key == '!ref') {
+      continue;
+    }
+    let val = sheetData[key].v;
+    if (key.startsWith('A')) {
+      // 以.拆分成字段数组
+      let arra = val.split('.');
+      if (arra.length == 1) { // 表头
+        continue;
+      }
+      // 遍历
+      let tmp = chnJson;
+      let tmp2 = enJson;
+      for(let i = 0; i < arra.length; i++) {
+        let prefix = arra[i];
+        if (!tmp[prefix]) {
+          if (i < arra.length - 1) {
+            tmp[prefix] = {};
+            tmp2[prefix] = {};
+          } else {
+            tmp[prefix] = sheetData[key.replace('A', 'B')] ? sheetData[key.replace('A', 'B')].v : '';
+            tmp2[prefix] = sheetData[key.replace('A', 'C')] ? sheetData[key.replace('A', 'C')].v : '';
+          }
+        }
+        tmp = tmp[prefix];
+        tmp2 = tmp2[prefix];
+      }
+    }
+  }
+  return [chnJson, enJson];
 }

@@ -7,6 +7,7 @@ export default {
     button: {
       login: 'login',
       logout: 'logout',
+      confirm: 'confirm'
     }
   },
   page: { // page-level component
@@ -49,8 +50,11 @@ export default {
       setInteceptor: 'Interceptor configured.',
       accessDeny: 'You are not logged in and cannot access.',
       accessNotAuthor: 'You are not authorized to access this page.',
-      onekeyExportChn: 'One-click export of Chinese language pack',
-      genLangFile: 'Generate language files based on language packs'
+      internationDoc: 'Internationalization under the vue framework',
+      onekeyExportChn: 'One-click export of Chinese language pack (Excel)',
+      onekeyExportBoth: 'One-click export of Chinese and English language packs (Excel)',
+      genLangFile: 'Generate language files based on language packs',
+      uploadiFirst: 'Please upload an excel language pack first.'
     },
     pageDemo1: {
       en: 'English',
