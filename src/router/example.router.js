@@ -21,82 +21,82 @@ export default [{
     template: '<article><router-view></router-view></article>'
   },
   children: [{
-      path: 'http',
-      name: 'httpUsage',
-      component: httpUsage
+    path: 'http',
+    name: 'httpUsage',
+    component: httpUsage
+  },
+  {
+    path: 'login',
+    name: 'routerUsageLogin',
+    component: login
+  },
+  {
+    path: 'router',
+    name: 'routerUsage',
+    component: shopmall,
+    children: [{
+      path: 'backend',
+      name: 'backend',
+      component: backend,
+      meta: {
+        requiresAuth: true,
+        role: 'admin'
+      }
     },
     {
-      path: 'login',
-      name: 'routerUsageLogin',
-      component: login,
+      path: 'shop',
+      name: 'shop',
+      component: shop
     },
     {
-      path: 'router',
-      name: 'routerUsage',
-      component: shopmall,
-      children: [{
-          path: 'backend',
-          name: 'backend',
-          component: backend,
-          meta: {
-            requiresAuth: true,
-            role: 'admin'
-          }
-        },
-        {
-          path: 'shop',
-          name: 'shop',
-          component: shop
-        },
-        {
-          path: 'homepage',
-          name: 'homepage',
-          component: homapage,
-          meta: {
-            keepAlive: true,
-            requiresAuth: true
-          } // keepAlive 用来状态保存， requiresAuth 用于鉴权
-        }
-      ]
-    },
-    {
-      path: 'vlogin',
-      name: 'vuexUsageLogin',
-      component: vLogin,
-    },
-    {
-      path: 'vuex',
-      name: 'vuexUsage',
-      component: vShopmall,
-      children: [{
-          path: 'vBackend',
-          name: 'vBackend',
-          component: vBackend,
-          meta: {
-            requiresAuth: true,
-            role: 'admin'
-          }
-        },
-        {
-          path: 'vShop',
-          name: 'vShop',
-          component: vShop
-        },
-        {
-          path: 'vHomepage',
-          name: 'vHomepage',
-          component: vHomapage,
-          meta: {
-            keepAlive: true,
-            requiresAuth: true
-          } // keepAlive 用来状态保存， requiresAuth 用于鉴权
-        }
-      ]
-    },
-    {
-      path: 'internUsage',
-      name: 'internUsage',
-      component: internUsage
+      path: 'homepage',
+      name: 'homepage',
+      component: homapage,
+      meta: {
+        keepAlive: true,
+        requiresAuth: true
+      } // keepAlive 用来状态保存， requiresAuth 用于鉴权
     }
+    ]
+  },
+  {
+    path: 'vlogin',
+    name: 'vuexUsageLogin',
+    component: vLogin
+  },
+  {
+    path: 'vuex',
+    name: 'vuexUsage',
+    component: vShopmall,
+    children: [{
+      path: 'vBackend',
+      name: 'vBackend',
+      component: vBackend,
+      meta: {
+        requiresAuth: true,
+        role: 'admin'
+      }
+    },
+    {
+      path: 'vShop',
+      name: 'vShop',
+      component: vShop
+    },
+    {
+      path: 'vHomepage',
+      name: 'vHomepage',
+      component: vHomapage,
+      meta: {
+        keepAlive: true,
+        requiresAuth: true
+      } // keepAlive 用来状态保存， requiresAuth 用于鉴权
+    }
+    ]
+  },
+  {
+    path: 'internUsage',
+    name: 'internUsage',
+    component: internUsage
+  }
   ]
 }]

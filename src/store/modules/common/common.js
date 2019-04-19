@@ -4,8 +4,8 @@ import {
 } from '../../../lib/locale/index'
 
 const state = {
-  i18nLanguage: 'chn',
-  
+  i18nLanguage: 'chn'
+
 }
 
 const getters = {
@@ -16,7 +16,7 @@ const actions = {
 }
 
 const mutations = {
-  [types.COMMON_SET_I18N_LANGUAGE](state, obj) {
+  [types.COMMON_SET_I18N_LANGUAGE] (state, obj) {
     let instance = obj.vue
     let lang = obj.lang
     if (!instance || !lang) {

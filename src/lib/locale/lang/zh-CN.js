@@ -62,7 +62,10 @@ export default {
       httpReq: 'http请求',
       routers: 'router路由',
       vuexManage: 'vuex状态管理',
-      internation: '国际化'
+      internation: '国际化',
+      setSucc: '设置成功',
+      setFail: '设置失败',
+      reqUnormal: '请求响应异常'
     }
   }
 }

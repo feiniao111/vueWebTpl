@@ -6,7 +6,7 @@ import {t} from '../lib/locale/index'
 
 Vue.use(Router)
 // production
-let env = window.myGlobalClosure.getEnv();
+let env = window.myGlobalClosure.getEnv()
 const routes = env != 'production' ? [
   {
     path: '/inputMock',
@@ -35,7 +35,7 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     // this route requires auth, check if logged in
     // if not, redirect to login page.
-    let role = window.myGlobalClosure.getRole();
+    let role = window.myGlobalClosure.getRole()
     if (!role) {
       alert(t('page.examples.accessDeny'))
       next(to.fullPath.includes('/router') ? {

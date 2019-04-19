@@ -5,17 +5,17 @@
  *  —— 响应式数据（比如在支持多语言的网站，存放当前语言变量，当变量改变，自动触发视图重新渲染）
  *  —— 两个子路由组件间数据通信（如果数据量不大，可以用$route.query传递）
  */
-import Vue from 'vue';
-import Vuex from 'vuex';
-import common from './modules/common/common';
+import Vue from 'vue'
+import Vuex from 'vuex'
+import common from './modules/common/common'
 import pageDemo1 from './modules/pageDemo1/pageDemo1'
-Vue.use(Vuex);
+Vue.use(Vuex)
 const store = new Vuex.Store({
-    modules: {
-        common,
-        pageDemo1
-    },
-    strict: process.env.NODE_ENV !== 'production'
-});
+  modules: {
+    common,
+    pageDemo1
+  },
+  strict: process.env.NODE_ENV !== 'production'
+})
 
-export default store;
+export default store

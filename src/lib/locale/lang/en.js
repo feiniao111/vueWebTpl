@@ -62,7 +62,10 @@ export default {
       httpReq: 'Http request',
       routers: 'Router usage',
       vuexManage: 'Vuex management',
-      internation: 'internation'
+      internation: 'internation',
+      setSucc: 'Set succeed.',
+      setFail: 'Set failed',
+      reqUnormal: 'Request response exception'
     }
   }
 }
