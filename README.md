@@ -1,6 +1,8 @@
 # vuetpl
 
-> Vue项目模板
+> Vue项目模板  
+运行效果戳这里：  
+https://feiniao111.github.io/vueWebTpl-live/#/
 
 ## 特性
 - 清晰易扩展的目录结构
@@ -22,25 +24,25 @@
 
 ### 清晰易维护的目录结构
 src  
-├─api               //http请求  
+├─api ........................................................//http请求  
 │  └─examples       
-├─apiMock           //http请求mock，与api一一对应  
+├─apiMock .............................................//http请求mock，与api一一对应  
 │  └─examples  
-├─assets            //存放样式文件、图片等资源  
-├─components        //存放通用组件  
-├─examples          //存放示例  
+├─assets ...................................................//存放样式文件、图片等资源  
+├─components ......................................//存放通用组件  
+├─examples ............................................//存放示例  
 │  ├─routerUsage  
 │  └─vuexUsage  
-├─lib               //全局库目录  
-│  ├─directives     //指令  
-│  ├─locale         //国际化目录  
-│  │  └─lang        //语言包  
-│  ├─mixins         //混合
-│  └─utils          //通用函数  
-├─pages             //页面组件，模块化存放  
+├─lib ...........................................................//全局库目录  
+│  ├─directives .........................................//指令  
+│  ├─locale .................................................//国际化目录  
+│  │  └─lang ................................................//语言包  
+│  ├─mixins ................................................//混合  
+│  └─utils .....................................................//通用函数  
+├─pages .....................................................//页面组件，模块化存放   
 │  └─pageDemo1  
-├─router            //路由文件，模块化存放
-└─store             //vuex文件，模块化存放
+├─router .....................................................//路由文件，模块化存放  
+└─store .......................................................//vuex文件，模块化存放  
     └─modules  
         ├─common  
         └─pageDemo1  
@@ -54,19 +56,12 @@ src
 但是全局变量如果管理不当，容易引发滥用，不易维护。  
 常见的全局变量管理方法有两种，一种是设定一个namespace，将变量挂载到该名空间下，另一种方法是采用闭包。  
 这里采用第二种做法，将全局变量作为私有变量'保护'起来，只暴露get和set方法。
-```
+```js
 // static/global.js
 window.myGlobalClosure = (function () {
   var __object = {
     vueInst: undefined, // vue示例
     i18nLanguage: 'chn',
-    env: 'development', // 当前环境
-    role: undefined, // 角色，可用于路由拦截
-    token: undefined,
-    tokenAttr: 'requesttoken', // token字段，可用于http请求拦截
-    tokenExpireCode: 10010, // token过期状态码, 根据服务端设置
-    tokenInvalidCode: 10011, // token无效状态码，根据服务端设置
-    httpTimeout: 5000 // 请求超时时间，5秒
   }
   return {
     // 设置vue实例
@@ -88,42 +83,12 @@ window.myGlobalClosure = (function () {
     },
     getLang: function () {
       return __object.i18nLanguage
-    },
-    getEnv: function () {
-      return __object.env
-    },
-    setEnv: function (env) {
-      __object.env = env
-    },
-    getRole: function () {
-      return __object.role
-    },
-    setRole: function (uid) {
-      __object.role = uid
-    },
-    setToken: function (token) {
-      __object.token = token
-    },
-    getToken: function () {
-      return __object.token
-    },
-    getTokenAttr: function () {
-      return __object.tokenAttr
-    },
-    getTimeout: function () {
-      return __object.httpTimeout
-    },
-    getTokenExpireCode: function () {
-      return __object.tokenExpireCode
-    },
-    getTokenInvalidCode: function () {
-      return __object.tokenInvalidCode
     }
   }
 })()
 ```
 全局变量文件在入口html处载入。
-```
+```js
 // index.html
 <body>
     <div id="app"></div>
@@ -137,20 +102,47 @@ window.myGlobalClosure = (function () {
 ### 丰富的demo
 本项目模板提供了丰富的例子，对常见的场景（http请求、vue-router、vuex等）用法进行介绍
 #### http请求
+这里采用官方推荐插件axios，并且给出了常用的get、post请求用法，多个请求如何并发执行、顺序执行，请求如何设置全局超时时间，token、超时、断网的处理等等。 
+具体戳这里
+<a href="https://github.com/feiniao111/vueWebTpl/blob/master/src/examples/httpUsage.vue" target="_blank">httpUsage</a>   
+值得说明的是，我们将axios绑定到vue实例原型
+```js
+import axios from 'axios'
+Vue.prototype.$http = axios // 绑定到原型
+```
+这样就可以在.vue文件中通过
+```js
+this.$http.get()
+this.$http.post()
+...
+```
+来请求资源。  
+另外，项目模板将http请求统一放置到`api`目录中，
+```js
+// api/examples/vuexUsage.js
+import axios from 'axios'
+const HTTP = axios
 
+export default {
+  setNickname (name) {
+    return HTTP.post('/setNickname', {name: name})
+  }
+}
+```
+然后在业务中调用http请求对应的封装方法，这样既可以减少业务中http请求的代码量，又能够实现http请求的复用。
 #### vue-router使用
 
 #### vuex使用
 
 ### 生产环境去除demo路由 & demo路由懒加载
-大家在使用项目模板时，都不可避免的要对其内容进行修改或删除。因为模板提供的demo只是为了供开发人员在开发时参考，上线时这一部分应该去除，否则占据资源和带宽。  
-考虑到这一点，本模板自动提供了生产环境去除demo路由功能，即执行
+大家在使用项目模板时，都不可避免的要对其内容进行修改或删除，因为模板提供的demo只是为了供开发人员在开发时参考，上线时这一部分应该去除，否则占据资源和带宽。  
+考虑到这一点，本项目模板自动提供了生产环境去除demo路由功能，即执行
 ```
 npm run build
 ```
-时，不会加载demo组件。另外，demo的路由是懒加载的，不访问就不会下载到浏览器中。因此demo目录可以一直保存在项目中，即使项目维护人员更迭，新人也能看到并遵循。
+时，不会加载demo组件。另外，demo的路由是懒加载的，不访问就不会下载到浏览器中。因此demo目录可以一直保存在项目中，即使项目维护人员更迭，新人也能看到并参考。
 1. 通过HtmlWebpackPlugin插件注入环境变量
-```
+```js
 // webpack.dev.conf.js
 const env = require('../config/dev.env')
 const definedEnv = env.NODE_ENV // 'development'
@@ -174,7 +166,7 @@ plugins: [
 ]
 ```
 2. 在入口html处，将环境变量写入全局闭包
-```
+```js
 // index.html
 <!-- 项目使用到的全局变量  -->
 <script type="text/javascript" src="static/global.js"></script>
@@ -203,13 +195,12 @@ window.myGlobalClosure = (function () {
 })
 ```
 3. 路由表中根据当前环境决定是否导入demo页面
-```
+```js
 // src/router/index.js
 import page1Router from './pageDemo1.router'
 import InputMock from '@/components/InputMock'
 
 Vue.use(Router)
-// production
 let env = window.myGlobalClosure.getEnv()
 const routes = env != 'production' ? [
   {
@@ -221,7 +212,7 @@ const routes = env != 'production' ? [
 ] : []
 ```
 4. demo路由懒加载
-```
+```js
 // 懒加载路由，不影响实际加载性能
 // https://router.vuejs.org/zh/guide/advanced/lazy-loading.html#%E6%8A%8A%E7%BB%84%E4%BB%B6%E6%8C%89%E7%BB%84%E5%88%86%E5%9D%97
 const httpUsage = () => import('../examples/httpUsage.vue')
