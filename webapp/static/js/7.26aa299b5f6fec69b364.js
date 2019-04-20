@@ -1,0 +1,2 @@
+webpackJsonp([7],{"5j0F":function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var s=n("Dd8w"),r=n.n(s),a=n("NYxO"),l={data:function(){return{}},computed:r()({},Object(a.b)(["getUsername"]))},u={render:function(){var e=this.$createElement;return(this._self._c||e)("section",[this._v(this._s(this.$t("page.examples.shopMallPage2",{username:this.getUsername})))])},staticRenderFns:[]},i=n("VU/8")(l,u,!1,null,null,null);t.default=i.exports}});
+//# sourceMappingURL=7.26aa299b5f6fec69b364.js.map
