@@ -1,2 +1,0 @@
-webpackJsonp([11],{"/YyO":function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var s={render:function(){var e=this.$createElement;return(this._self._c||e)("section",[this._v(this._s(this.$t("page.examples.backendPage")))])},staticRenderFns:[]},r=n("VU/8")({data:function(){return{}}},s,!1,null,null,null);t.default=r.exports}});
-//# sourceMappingURL=11.45ea20b8d3bd64d6eb39.js.map

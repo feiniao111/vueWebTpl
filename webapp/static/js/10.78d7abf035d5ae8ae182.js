@@ -1,2 +1,0 @@
-webpackJsonp([10],{hDkj:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var s={render:function(){var e=this.$createElement;return(this._self._c||e)("section",[this._v(this._s(this.$t("page.examples.shopMallPage")))])},staticRenderFns:[]},l=n("VU/8")({data:function(){return{}}},s,!1,null,null,null);t.default=l.exports}});
-//# sourceMappingURL=10.78d7abf035d5ae8ae182.js.map
