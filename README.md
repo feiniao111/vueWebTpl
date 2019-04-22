@@ -5,21 +5,21 @@
 https://feiniao111.github.io/vueWebTpl-live/#/
 
 ## 特性
-- 清晰易扩展的目录结构
-- 以闭包封装全局变量
-- 丰富的demo
-  - http请求
-  - router路由
-  - vuex状态管理
-  - 国际化
-- 请求mock
-- 生产环境虑除demo路由
-- 提供多种小工具
-  - 自动提交编译webapp到svn脚本
-  - 语言包一键导出到excel
-  - excel一键生成语言包  
+- [清晰易扩展的目录结构](#清晰易扩展的目录结构)
+- [以闭包封装全局变量](#以闭包封装全局变量)
+- [丰富的demo](#丰富的demo)
+  - [http请求](#http请求)
+  - [router路由](#router路由)
+  - [vuex状态管理](#vuex状态管理)
+  - [国际化](#国际化)
+- [请求mock](#请求mock)
+- [生产环境去除demo路由 & demo路由懒加载](#生产环境去除demo路由-&-demo路由懒加载)
+- [提供多种小工具](#提供多种小工具)
+  - [自动提交编译webapp到svn脚本](#自动提交编译webapp到svn脚本)
+  - [语言包一键导出到excel](#语言包一键导出到excel)
+  - [excel一键生成语言包](#excel一键生成语言包)  
 
-### 清晰易维护的目录结构
+### 清晰易扩展的目录结构
 src  
 ├─api ........................................................//http请求  
 │  └─examples       
@@ -107,14 +107,14 @@ window.myGlobalClosure = (function () {
 import axios from 'axios'
 Vue.prototype.$http = axios // 绑定到原型
 ```
-**这样就可以在.vue文件中通过**
+这样就可以在.vue文件中通过
 ```js
 this.$http.get()
 this.$http.post()
 ...
 ```
-**来请求资源。
-另外，项目模板将http请求统一放置到`api`目录中，**
+来请求资源。
+另外，**项目模板将http请求统一放置到`api`目录中，**
 ```js
 // api/examples/vuexUsage.js
 import axios from 'axios'
@@ -168,7 +168,7 @@ router.beforeEach((to, from, next) => {
 #### vuex使用
 vuex是官方推荐的用来做状态管理的一款插件，适合于大中型项目。对于小型项目vue官网给出了一个[简单状态管理方式](https://cn.vuejs.org/v2/guide/state-management.html#%E7%AE%80%E5%8D%95%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%E8%B5%B7%E6%AD%A5%E4%BD%BF%E7%94%A8)(之前的文档应该是介绍公共总线，现更换成store模式)。  
 对于是采用vuex还是简单状态管理方式，个人的看法是统一使用其中一种，即要么都采用vuex，要么都采用简单状态管理方式，这样项目整体一致，更容易维护。  
-本项目模板采用vuex作为全局的状态管理。相比于上面介绍的全局闭包，设置vuex变量有这么几个特征：
+本项目模板采用vuex作为全局的状态管理方案。相比于上面介绍的全局闭包，设置vuex变量有这么几个特征：
 - 变量
 - 多处业务使用到（比如用户登录信息、购物车商品信息，没必要每个使用到的页面都去服务器请求一次）
 - 响应式数据（比如在支持多语言的网站，存放当前语言变量，当变量改变，自动触发视图重新渲染）
@@ -311,7 +311,7 @@ new Vue({
 ```js
 this.$i18n.locale = lang
 ```
-由于不同语言，字段翻译长度不一样，因而每个页面都需要检查样式是否异常。而在每个页面甚至局部组件中都暴露语言切换代码（如开发环境增加一个切换语言的button），是一件重复且繁琐的事情。因此，我们将语言切换代码直接暴露给全局变量window，从而在Console中输入命令即可实现语言切换。具体的，将语言切换逻辑封装在vuex中，把vue实例赋值给全局闭包`window.myGlobalClosure`中的私有变量，通过set方法来执行语言切换。
+由于不同语言，字段翻译长度不一样，因而每个页面都需要检查样式是否正常，但是在每个页面甚至局部组件中都暴露语言切换代码（如增加一个切换语言的button），是一件重复且繁琐的事情。因此，我们将语言切换代码直接暴露给全局变量window，从而在Console中输入命令即可实现语言切换。具体的，将语言切换逻辑封装在vuex中，把vue实例赋值给全局闭包`window.myGlobalClosure`中的私有变量，通过set方法来执行语言切换。
 ```js
 // src/store/modules/commoncommon.js
 import * as types from '../../mutation-types'
@@ -320,7 +320,7 @@ import {
 } from '../../../lib/locale/index'
 
 const state = {
-  i18nLanguage: 'chn'  // 系统当前语言是所有页面通过的
+  i18nLanguage: 'chn'  // 系统当前语言是所有页面通用的,可作为CSS类名来调整样式
 
 }
 
@@ -392,12 +392,12 @@ window.myGlobalClosure = (function () {
 })()
 ```
 现在，在Console中输入
-```
+```js 
 window.myGlobalClosure('en')
 ```
 即可快速切换地将项目语言切换到英语。
 
-**值得说明的是，如果项目包含了非.vue的js或者jq插件，vue-i18n插件无法直接切换这些文件的文本字段，因此需要进一步把vue-i18n的翻译函数$t暴露出来。**这里暴露出来的独立t函数，参考了[Element-UI](https://element.eleme.io/#/zh-CN)的实现，具体见[独立t函数](https://github.com/feiniao111/vueWebTpl/blob/master/src/lib/locale/index.js)   
+**值得说明的是，如果项目包含了非.vue的js或者jq插件，vue-i18n插件是无法直接切换这些文件的文本字段，因此需要进一步把vue-i18n的翻译函数$t暴露出来。** 这里暴露出来的独立t函数，参考了[Element-UI](https://element.eleme.io/#/zh-CN)的实现，具体见[独立t函数](https://github.com/feiniao111/vueWebTpl/blob/master/src/lib/locale/index.js)   
 关于国际化处理方案的更多内容，请参考作者的另一篇文档： 
 [vue框架下的国际化](https://feiniao111.github.io/2019/02/04/vue/vue%E6%A1%86%E6%9E%B6%E4%B8%8B%E7%9A%84%E5%9B%BD%E9%99%85%E5%8C%96-md/)
 
@@ -407,7 +407,7 @@ window.myGlobalClosure('en')
 ```
 npm run build
 ```
-时，不会加载demo页面。另外，demo的路由是懒加载的，不访问就不会下载demo组件到浏览器中。因此demo目录可以一直保存在项目中，即使项目维护人员更迭，新人也能看到并参考。
+时，不会加载demo页面。另外，demo的路由是懒加载的，因此也不会下载demo组件到浏览器中。因此demo目录可以一直保存在项目中，即使项目维护人员更迭，新人也能看到并参考。
 1. 通过HtmlWebpackPlugin插件注入环境变量
 ```js
 // webpack.dev.conf.js
@@ -536,5 +536,3 @@ npm run build
 # build for production and view the bundle analyzer report
 npm run build --report
 ```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
