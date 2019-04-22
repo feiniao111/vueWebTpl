@@ -1,15 +1,14 @@
 # vuetpl
 
 > Vue项目模板  
-运行效果戳这里：  
-https://feiniao111.github.io/vueWebTpl-live/#/
+运行效果戳这里：  https://feiniao111.github.io/vueWebTpl-live/#/
 
 ## 特性
 - [清晰易扩展的目录结构](#清晰易扩展的目录结构)
 - [以闭包封装全局变量](#以闭包封装全局变量)
 - [丰富的demo](#丰富的demo)
   - [http请求](#http请求)
-  - [router路由](#router路由)
+  - [vue-router使用](#vue-router使用)
   - [vuex状态管理](#vuex状态管理)
   - [国际化](#国际化)
 - [请求mock](#请求mock)
@@ -85,7 +84,7 @@ window.myGlobalClosure = (function () {
 })()
 ```
 全局变量文件在入口html处载入。
-```js
+```html
 // index.html
 <body>
     <div id="app"></div>
@@ -97,7 +96,7 @@ window.myGlobalClosure = (function () {
 这样，我们就可以在.vue或js插件中通过`window.myGlobalClosure.setXX()`或者`window.myGlobalClosure.getXX()`设置或访问全局变量。
 
 ### 丰富的demo
-本项目模板提供了丰富的例子，对常见的场景（http请求、vue-router、vuex等）用法进行介绍
+本项目模板提供了丰富的例子，对常见的场景（http请求、vue-router、vuex、国际化等）用法进行介绍
 #### http请求
 这里采用官方推荐插件axios，并且给出了常用的get、post请求用法，多个请求如何并发执行、顺序执行，请求如何设置全局超时时间，添加token、断网处理等等。 
 具体戳这里
@@ -165,7 +164,7 @@ router.beforeEach((to, from, next) => {
 })
 ```
 
-#### vuex使用
+#### vuex状态管理
 vuex是官方推荐的用来做状态管理的一款插件，适合于大中型项目。对于小型项目vue官网给出了一个[简单状态管理方式](https://cn.vuejs.org/v2/guide/state-management.html#%E7%AE%80%E5%8D%95%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%E8%B5%B7%E6%AD%A5%E4%BD%BF%E7%94%A8)(之前的文档应该是介绍公共总线，现更换成store模式)。  
 对于是采用vuex还是简单状态管理方式，个人的看法是统一使用其中一种，即要么都采用vuex，要么都采用简单状态管理方式，这样项目整体一致，更容易维护。  
 本项目模板采用vuex作为全局的状态管理方案。相比于上面介绍的全局闭包，设置vuex变量有这么几个特征：
