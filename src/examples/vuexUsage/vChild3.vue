@@ -2,7 +2,7 @@
   <section>
     {{$t('page.examples.homePage2', {username: getUsername})}}
     <p>
-      <h2>昵称修改</h2>
+      <h2>{{$t('page.examples.nicknameModify')}}</h2>
       <input v-model='newname'>
       <button @click='handleRename'>{{$t('comp.button.confirm')}}</button>
     </p>
@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     handleRename() {
-      this.$store.dispatch('editNickname', {name: this.newname});
+      this.$store.dispatch('editNickname', {name: this.newname}).then(() => {}).catch(() => {});
     }
   }
 };

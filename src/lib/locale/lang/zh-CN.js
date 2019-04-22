@@ -54,7 +54,8 @@ export default {
       onekeyExportChn: '一键导出中文语言包(Excel)',
       onekeyExportBoth: '一键导出中英文语言包(Excel)',
       genLangFile: '根据语言包生成语言文件',
-      uploadiFirst: '请先上传一个excel语言包'
+      uploadiFirst: '请先上传一个excel语言包',
+      nicknameModify: '昵称修改'
     },
     pageDemo1: {
       en: '英语',

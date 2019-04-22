@@ -54,7 +54,8 @@ export default {
       onekeyExportChn: 'One-click export of Chinese language pack (Excel)',
       onekeyExportBoth: 'One-click export of Chinese and English language packs (Excel)',
       genLangFile: 'Generate language files based on language packs',
-      uploadiFirst: 'Please upload an excel language pack first.'
+      uploadiFirst: 'Please upload an excel language pack first.',
+      nicknameModify: 'Nickname modification'
     },
     pageDemo1: {
       en: 'English',

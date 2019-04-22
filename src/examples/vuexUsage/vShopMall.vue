@@ -1,21 +1,21 @@
 <template>
   <article>
     <header>
-       <h1>{{$t('page.examples.enterPage')}}</h1>
+      <h1>{{$t('page.examples.enterPage')}}</h1>
     </header>
     <nav>
       <ul>
         <li>
-          <a @click='routeTo("vBackend")'>{{$t('page.examples.backend')}}</a>
+          <a @click="routeTo("vBackend")">{{$t('page.examples.backend')}}</a>
         </li>
         <li>
-          <a @click='routeTo("vShop")'>{{$t('page.examples.shopMall')}}</a>
+          <a @click="routeTo("vShop")">{{$t('page.examples.shopMall')}}</a>
         </li>
         <li>
-          <a @click='routeTo("vHomepage")'>{{$t('page.examples.home')}}</a>
+          <a @click="routeTo("vHomepage")">{{$t('page.examples.home')}}</a>
         </li>
         <li>
-            <button @click='logout'>{{$t('comp.button.logout')}}</button>
+          <button @click="logout">{{$t('comp.button.logout')}}</button>
         </li>
       </ul>
     </nav>
@@ -47,18 +47,16 @@ a {
     
 <script>
 export default {
-  watch: {
-  },
+  watch: {},
   data() {
-    return {
-    };
+    return {};
   },
   methods: {
     routeTo(name) {
-      this.$router.push({name: name})
+      this.$router.push({ name: name });
     },
     logout() {
-        this.$router.push({name: 'vuexUsageLogin'})
+      this.$router.push({ name: "vuexUsageLogin" });
     }
   }
 };
