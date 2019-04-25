@@ -7,7 +7,7 @@ import {t} from '../lib/locale/index'
 Vue.use(Router)
 // production
 let env = window.myGlobalClosure.getEnv()
-const routes = env != 'production' ? [
+const routes = env !== 'production' ? [
   {
     path: '/inputMock',
     name: 'inputMock',
