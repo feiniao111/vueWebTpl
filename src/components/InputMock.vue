@@ -51,9 +51,8 @@ export default {
     }
   },
   methods: {
-    handleChange() {
-        let inputDom = this.$el.querySelector('.input_mock__button--real');
-        this.file = inputDom.files[0]
+    handleChange(e) {
+        this.file = e.target.files[0]
         console.log(this.file)
     }
   },

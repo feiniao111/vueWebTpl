@@ -312,7 +312,7 @@ this.$i18n.locale = lang
 ```
 由于不同语言，字段翻译长度不一样，因而每个页面都需要检查样式是否正常，但是在每个页面甚至局部组件中都暴露语言切换代码（如增加一个切换语言的button），是一件重复且繁琐的事情。因此，我们将语言切换代码直接暴露给全局变量window，从而在Console中输入命令即可实现语言切换。具体的，将语言切换逻辑封装在vuex中，把vue实例赋值给全局闭包`window.myGlobalClosure`中的私有变量，通过set方法来执行语言切换。
 ```js
-// src/store/modules/commoncommon.js
+// src/store/modules/common.js
 import * as types from '../../mutation-types'
 import {
   use
@@ -320,7 +320,6 @@ import {
 
 const state = {
   i18nLanguage: 'chn'  // 系统当前语言是所有页面通用的,可作为CSS类名来调整样式
-
 }
 
 const getters = {
@@ -350,6 +349,14 @@ export default {
   actions,
   mutations
 }
+
+// vueWebTpl\src\store\mutation-types.js
+/**
+ * common
+ */
+// 国际化语言
+export const COMMON_SET_I18N_LANGUAGE = 'common/SET_I18N_LANGUAGE'
+
 
 // App.vue
 export default {
@@ -392,7 +399,7 @@ window.myGlobalClosure = (function () {
 ```
 现在，在Console中输入
 ```js 
-window.myGlobalClosure('en')
+window.myGlobalClosure.setLang('en')
 ```
 即可快速切换地将项目语言切换到英语。
 

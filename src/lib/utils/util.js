@@ -214,9 +214,9 @@ export function throttle (fn, threshold) {
 
 /**
  * 将json数据扁平化，多层的key以.拼接成一个
- * @param {} jsonObj
+ * @param {} jsonObj 原始json对象，可能含多层
  * @param {*} keyPrefix
- * @param {*} result
+ * @param {*} result 存储扁平化后的json对象
  */
 export function joint (jsonObj, keyPrefix = '', result = {}) {
   for (let word in jsonObj) {

@@ -16,47 +16,73 @@
     </ul>
     <ul>
       <li>
-        <input type="file" name="langPackage" class="langUpload" @change="handleChange">
-        <button @click="hanleGen">{{$t('page.examples.genLangFile')}}</button>
+        <div class="border">
+          <h1>{{$t('page.examples.excel2json')}}</h1>
+          {{$t('page.examples.uploadExcelHint')}}
+          <input
+            type="file"
+            name="excelPackage"
+            @change="handleChange"
+          >
+          <button @click="hanleGen">{{$t('page.examples.genLangFile')}}</button>
+        </div>
+      </li>
+      <li>
+        <div class="border">
+          <h1>{{$t('page.examples.json2excel')}}</h1>
+          {{$t('page.examples.uploadJsonHint')}}
+          <input
+            type="file"
+            name="chLangPackage"
+            class="chJsonUpload"
+            @change="handleChange2"
+          >
+          {{$t('page.examples.optional')}}{{$t('page.examples.uploadJsonHint2')}}
+          <input
+            type="file"
+            name="enLangPackage"
+            class="enJsonUpload"
+            @change="handleChange3"
+          >
+          <button @click="hanleGen2">{{$t('page.examples.genExcelFile')}}</button>
+        </div>
       </li>
     </ul>
   </section>
 </template>
+
+<style lang='scss' scoped>
+.border {
+  padding: 10px;
+  border: 1px solid #999;
+}
+</style>
 
 <script>
 import { joint, sheet2blob, downExcel, parseExcel } from "../lib/utils/util.js";
 import chnJson from "../lib/locale/lang/zh-CN.js";
 import enJson from "../lib/locale/lang/en.js";
 import XLSX from "xlsx/dist/xlsx.core.min.js";
-import en from '../lib/locale/lang/en.js';
-import { saveAs } from 'file-saver';
+import en from "../lib/locale/lang/en.js";
+import { saveAs } from "file-saver";
 
 export default {
   data() {
     return {
-      file: undefined
-    }
+      excelFile: undefined,
+      chJsonFile: undefined,
+      enJsonFile: undefined,
+      uploadChnJson: {},
+      uploadEnJson: {}
+    };
   },
   methods: {
-    handleExport() {
-      let FlatJson = {};
-      // 将语言包扁平化
-      joint(chnJson, "", FlatJson);
-      let data = Object.keys(FlatJson).map(key => [key, FlatJson[key]]);
-      // 插入表头
-      data.unshift(["字段", "中文", "英文"]);
-      let worksheet = XLSX.utils.aoa_to_sheet(data);
-
-      let blob = sheet2blob(worksheet);
-
-      downExcel(blob);
-    },
-    handleExport2() {
+    json2excel(chnJsonObj, enJsonObj = {}, filename = '中文语言包.xlsx') {
       let FlatJsonChn = {};
       let FlatJsonEn = {};
       // 将语言包扁平化
-      joint(chnJson, "", FlatJsonChn);
-      joint(enJson, "", FlatJsonEn);
+      joint(chnJsonObj, "", FlatJsonChn);
+      joint(enJsonObj, "", FlatJsonEn);
       let data = Object.keys(FlatJsonChn).map(key => [
         key,
         FlatJsonChn[key],
@@ -68,34 +94,81 @@ export default {
 
       let blob = sheet2blob(worksheet);
 
-      downExcel(blob, "中英文语言包.xlsx");
+      downExcel(blob, filename);
+    },
+    handleExport() {
+      this.json2excel(chnJson);
+    },
+    handleExport2() {
+      this.json2excel(chnJson, enJson, '中英文语言包.xlsx');
     },
     hanleGen() {
-      if (!this.file) {
-        alert(this.$t('page.examples.uploadiFirst'));
+      if (!this.excelFile) {
+        alert(this.$t("page.examples.uploadiFirst"));
         return;
       }
       let reader = new FileReader();
-      reader.onload = function(e) {
+      reader.onload = e => {
         var data = e.target.result;
         var wb = XLSX.read(data, { type: "binary" });
         console.log(wb);
-        let [chJson, enJson] = parseExcel(wb.Sheets['sheet1'])
-        console.log(11, chnJson, enJson, 22)
+        let [chJson, enJson] = parseExcel(wb.Sheets["sheet1"]);
+        console.log(11, chnJson, enJson, 22);
 
         // FileSaver.js:
         // https://github.com/eligrey/FileSaver.js
-        let blob1 = new Blob([JSON.stringify(chnJson)], {type: "text/plain;charset=utf-8"});
+        let blob1 = new Blob([JSON.stringify(chnJson)], {
+          type: "text/plain;charset=utf-8"
+        });
         saveAs(blob1, "zh-cn.js");
-        let blob2 = new Blob([JSON.stringify(enJson)], {type: "text/plain;charset=utf-8"});
+        let blob2 = new Blob([JSON.stringify(enJson)], {
+          type: "text/plain;charset=utf-8"
+        });
         saveAs(blob2, "en.js");
-      }
-      reader.readAsBinaryString(this.file);
+      };
+      reader.readAsBinaryString(this.excelFile);
     },
-    handleChange() {
-      let inputDom = this.$el.querySelector(".langUpload");
-      this.file = inputDom.files[0];
-      console.log(this.file);
+    hanleGen2() {
+      if (!this.chJsonFile) {
+        alert(this.$t("page.examples.uploadiFirst2"));
+        return;
+      }
+
+      let uploadEn = this.enJsonFile != undefined;
+
+      let reader = new FileReader();
+      reader.onload = e => {
+        var data = e.target.result;
+        console.log(data);
+        this.uploadChnJson = JSON.parse(data);
+        if (!uploadEn) {
+          this.json2excel(this.uploadChnJson)
+        }
+      };
+      reader.readAsText(this.chJsonFile);
+
+      let reader2 = new FileReader();
+      reader2.onload = e => {
+        var data = e.target.result;
+        console.log(data);
+        this.uploadEnJson = JSON.parse(data);
+        if (uploadEn) {
+          this.json2excel(this.uploadChnJson, this.uploadEnJson, '中英文语言包.xlsx');
+        }
+      };
+      uploadEn && reader2.readAsText(this.enJsonFile);
+    },
+    handleChange(e) {
+      this.excelFile = e.target.files[0];
+      console.log(this.excelFile);
+    },
+    handleChange2(e) {
+      this.chJsonFile = e.target.files[0];
+      console.log(this.chJsonFile);
+    },
+    handleChange3(e) {
+      this.enJsonFile = e.target.files[0];
+      console.log(this.enJsonFile);
     }
   }
 };
