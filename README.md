@@ -3,6 +3,26 @@
 > Vue项目模板  
 运行效果戳这里：  https://feiniao111.github.io/vueWebTpl-live/#/
 
+## 安装
+```bash
+git clone https://github.com/feiniao111/vueWebTpl.git
+```
+
+## Build Setup
+``` bash
+# install dependencies
+npm install
+
+# serve with hot reload at localhost:8080
+npm run dev
+
+# build for production with minification
+npm run build
+
+# build for production and view the bundle analyzer report
+npm run build --report
+```
+
 ## 特性
 - [清晰易扩展的目录结构](#清晰易扩展的目录结构)
 - [以闭包封装全局变量](#以闭包封装全局变量)
@@ -527,19 +547,3 @@ export default [{
 - BEM语法
 - 第三方js、jq插件的国际化
 - mock处理规范化
-
-## Build Setup
-
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-```
