@@ -56,6 +56,22 @@
   padding: 10px;
   border: 1px solid #999;
 }
+h1,
+h2 {
+  font-weight: normal;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+a {
+  color: #42b983;
+  cursor: pointer;
+}
 </style>
 
 <script>
@@ -63,7 +79,6 @@ import { joint, sheet2blob, downExcel, parseExcel } from "../lib/utils/util.js";
 import chnJson from "../lib/locale/lang/zh-CN.js";
 import enJson from "../lib/locale/lang/en.js";
 import XLSX from "xlsx/dist/xlsx.core.min.js";
-import en from "../lib/locale/lang/en.js";
 import { saveAs } from "file-saver";
 
 export default {
@@ -173,22 +188,3 @@ export default {
   }
 };
 </script>
-
-<style scoped lang='scss'>
-h1,
-h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-  cursor: pointer;
-}
-</style>
