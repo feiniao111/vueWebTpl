@@ -132,11 +132,11 @@ export default {
 
         // FileSaver.js:
         // https://github.com/eligrey/FileSaver.js
-        let blob1 = new Blob([JSON.stringify(chnJson)], {
+        let blob1 = new Blob([JSON.stringify(chnJson,"","\t")], {
           type: "text/plain;charset=utf-8"
         });
         saveAs(blob1, "zh-cn.js");
-        let blob2 = new Blob([JSON.stringify(enJson)], {
+        let blob2 = new Blob([JSON.stringify(enJson,"","\t")], {
           type: "text/plain;charset=utf-8"
         });
         saveAs(blob2, "en.js");
