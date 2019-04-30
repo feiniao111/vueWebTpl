@@ -305,7 +305,7 @@ window.myGlobalClosure = (function () {
 ```
 现在，我们可以很方便的在console输入
 ```js
-window.myGlobalClosure.cancelMock()
+window.myGlobalClosure.openMock()
 ```
 来开启mock，输入
 ```js
