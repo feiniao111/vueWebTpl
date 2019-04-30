@@ -1,7 +1,10 @@
 # vuetpl
 
 > Vue项目模板  
-运行效果戳这里：  https://feiniao111.github.io/vueWebTpl-live/#/
+![BG](https://raw.githubusercontent.com/feiniao111/gallery/master/vueTplBG.png)
+
+## 体验
+https://feiniao111.github.io/vueWebTpl-live/#/
 
 ## 安装
 ```bash
@@ -28,10 +31,10 @@ npm run build --report
 - [以闭包封装全局变量](#以闭包封装全局变量)
 - [丰富的demo](#丰富的demo)
   - [http请求](#http请求)
+  - [http请求mock](#http请求mock)
   - [vue-router使用](#vue-router使用)
   - [vuex状态管理](#vuex状态管理)
   - [国际化](#国际化)
-- [请求mock](#请求mock)
 - [生产环境去除demo路由 & demo路由懒加载](#生产环境去除demo路由--demo路由懒加载)
 - [提供多种小工具](#提供多种小工具)
   - [自动提交编译webapp到svn脚本](#自动提交编译webapp到svn脚本)
@@ -45,7 +48,7 @@ src
 │  └─examples  
 ├─assets ...................................................//存放样式文件、图片等资源  
 ├─components ......................................//存放通用组件  
-├─examples ............................................//存放示例  
+├─examples ............................................//存放实例  
 │  ├─routerUsage  
 │  └─vuexUsage  
 ├─lib ...........................................................//全局库目录  
@@ -75,7 +78,7 @@ src
 // static/global.js
 window.myGlobalClosure = (function () {
   var __object = {
-    vueInst: undefined, // vue示例
+    vueInst: undefined, // vue实例
     i18nLanguage: 'chn',
   }
   return {
@@ -119,7 +122,7 @@ window.myGlobalClosure = (function () {
 #### http请求
 这里采用官方推荐插件axios，并且给出了常用的get、post请求用法，多个请求如何并发执行、顺序执行，请求如何设置全局超时时间，添加token、断网处理等等。 
 具体戳这里
-<a href="https://github.com/feiniao111/vueWebTpl/blob/master/src/examples/httpUsage.vue" target="_blank">httpUsage</a>   
+<a href="https://github.com/feiniao111/vueWebTpl/blob/master/src/examples/httpUsage.vue" target="_blank">httpUsage</a>  
 **值得说明的是，我们将axios绑定到vue实例原型**
 ```js
 import axios from 'axios'
@@ -132,7 +135,7 @@ this.$http.post()
 ...
 ```
 来请求资源。
-另外，**项目模板将http请求统一放置到`api`目录中，**
+另外，项目模板将http请求统一放置到`api`目录中，
 ```js
 // api/examples/vuexUsage.js
 import axios from 'axios'
@@ -144,10 +147,211 @@ export default {
   }
 }
 ```
-**然后在业务中调用http请求对应的封装方法，这样既可以减少业务中http请求的代码量，又能够实现http请求的复用。**
+然后在业务中调用http请求对应的封装方法，这样既可以减少业务中http请求的代码量，又能够实现http请求的复用。
+
+#### http请求mock
+http请求mock是开发中很重要的一环。当前端开发和后端开发人员约定好接口返回后，就可以并行进行开发，此时http请求的返回由mock数据暂时取代。另外，一些异常场景不容易触发，这时的返回数据也可以通过mock进行构造，从而验证此时的前端交互是否正常。  
+我们的项目模板采用[mockjs](http://mockjs.com/)来**mock数据**和**拦截请求**。
+```s
+npm install mockjs --save-dev
+```
+同http请求一样，我们设置一个`apiMock`目录来存放http请求mock，目录内文件也是按模块进行组织。http请求mock代码如下：
+```js
+// src/apiMock/examples/httpUsage.js
+/**
+ * demo api请求Mock
+ * mockjs官方文档：
+ * https://github.com/nuysoft/Mock
+ */
+var Mock = require('mockjs')
+// 拦截url,返回模拟数据
+Mock.mock('/postReq1', 'post', {
+  'data': {
+    'cur_page': '这是mock的数据'
+  }
+})
+
+// 在这里添加mock方法，拦截其他请求
+Mock.mock('/login', 'post', {
+  status: 'success'
+})
+
+Mock.mock('/loginInfo', 'get', {
+  uid: 'xiaoming',
+  age: 18
+})
+...
+```
+
+当启用mock后，请求`/postReq1`将被mockjs插件拦截，不会发送到服务器中。拦截返回的数据为
+```js
+{
+  'data': {
+    'cur_page': '这是mock的数据'
+  }
+}
+```
+**灵活开启和关闭mock**  
+我们使用mock的目的为了加快开发和调试的速度，同时尽可能少地污染原生http请求。  
+一种可行的方案是，增加一个专门的mock环境，类似dev环境，通过执行
+```s
+npm run mock
+```
+启动。mock环境和dev环境非常类似，区别只是前者会加载`mockjs`，对http请求进行拦截。
+```js
+// build目录中增加一套mock配置，基本同dev 
+
+// 在main.js
+process.env == 'mock' && require('@/apiMock/index.js')
+
+// src/apiMock/index.js
+// 按页面来引用mock文件
+require('./examples/httpUsage') // 具体内容见上面
+require('./examples/vuexUsage')
+...
+```
+采用这种方案，完全不会污染开发环境和生成环境，即执行`npm run dev`和`npm run build`，都不会加载`mockjs`，http请求都能正常地发送和返回。但是，这种方案有一个明显的缺点——mock环境和dev环境来回切换比较麻烦，通过项目比较大，切换时间会比较长。  
+我们的项目模板，采取一种更灵活的方式，可以快速的在dev环境中启用和关闭mock。该方案的思路是:**在需要时加载mock文件，通过重载页面关闭mock**
+
+**在需要时加载mock文件**  
+由于`mockjs`通过`require()`方法开启，因此可以将`require()`封装成函数，在想要mock的时候调用这个函数。我们将该方法暴露给全局闭包,以便在console中就可以调用。注意，由于全局闭包所在文件`static/global.js`文件并没有被babel编译，不支持`require()`,故需将mock启用封装在vuex的mutation中，通过闭包的vue实例调用。
+```js
+// static/global.js
+window.myGlobalClosure = (function () {
+  var __object = {
+    vueInst: undefined, // vue实例
+    isMockMode: false, // 是否mock模式,初始为关闭
+  }
+  return {
+    // 设置vue实例
+    setVueInst: function (instance) {
+      __object.vueInst = instance
+    },
+    getVueInst: function () {
+      return __object.vueInst
+    },
+    setMockMode: function (bol) {
+      __object.isMockMode = bol
+    },
+    openMock: function () { // 开启mock
+      if (__object.vueInst) {
+        __object.vueInst.$store.commit('common/SET_IS_MOCK_MODE', true)
+        this.setMockMode(true)
+      }
+    },
+    cancelMock: function () { // 关闭mock
+      // mockjs没有提供关闭方法，只能重新刷新页面
+      location.reload(true)
+    }
+  }
+})()
+
+// src/store/modules/common/common.js
+import * as types from '../../mutation-types'
+
+const state = {
+  isMockMode: false
+}
+
+const getters = {
+  isMockMode: state => state.isMockMode
+}
+
+const actions = {
+}
+
+const mutations = {
+  [types.COMMON_SET_IS_MOCK_MODE] (state, bol) {
+    state.isMockMode = bol
+    if (bol) {
+      // 加载mock
+      require('@/apiMock/index.js')
+    }
+  }
+}
+
+export default {
+  state,
+  getters,
+  actions,
+  mutations
+}
+
+// src/store/mutation-type.js
+export const COMMON_SET_IS_MOCK_MODE = 'common/SET_IS_MOCK_MODE'
+
+// src/apiMock/index.js
+require('./examples/httpUsage')
+require('./examples/vuexUsage')
+...
+```
+
+**通过重载页面关闭mock**  
+由于`mockjs`本身并没有提供关闭接口，因此我们只能通过重新加载页面来实现关闭mock（页面初始时mock是关闭的）
+```js
+// static/global.js
+window.myGlobalClosure = (function () {
+  var __object = {
+    vueInst: undefined, // vue实例
+    isMockMode: false, // 是否mock模式,初始为关闭
+  }
+  return {
+    cancelMock: function () { // 关闭mock
+      // mockjs没有提供关闭方法，只能重新刷新页面
+      location.reload(true)
+    }
+  }
+})()
+```
+现在，我们可以很方便的在console输入
+```js
+window.myGlobalClosure.cancelMock()
+```
+来开启mock，输入
+```js
+window.myGlobalClosure.cancelMock()
+```
+关闭mock。
+
+**其他： 通过node-Server作为mock服务器**  
+值得说明的是，开发环境中，node作为server，也可以实现请求mock。
+```js
+// build/http.dev.fake.js
+/** 
+ * 开发环境，伪造服务端, 对接 devServer.before
+ * 
+ */ 
+module.exports = function (app, server) {
+  app.post('/postReq1', function (req, res) {
+    res.json({
+      'data': {
+        'cur_page': '这是真实的数据'
+      }
+    })
+  })
+  app.post('/login', function (req, res) {
+    res.json({
+      status: 'success'
+    })
+  })
+  ...
+}
+
+// build/webpack.dev.conf.js
+'use strict'
+const baseWebpackConfig = require('./webpack.base.conf')
+const httpFake = require('./http.dev.fake')
+const devWebpackConfig = merge(baseWebpackConfig, {
+  ...
+  // these devServer options should be customized in /config/index.js
+  devServer: {
+    before: httpFake
+  },
+```
+不过这种方式，mock请求的代码存放在build目录中，而不是src目录，不够规范。另外，mock返回数据的构造，也不如`mockjs`插件方便（比如一些随机数等）
 
 #### vue-router使用
-路由跳转几乎多有的项目都会用到。这里提供了一个浏览商城的例子，介绍路由设置、跳转、鉴权、状态保存。这里着重说明一下鉴权。  
+路由跳转几乎多有的项目都会用到。这里提供了一个浏览商城的例子，介绍路由设置、跳转、鉴权、状态保存。这里着重说明一下**鉴权**。  
 不用的角色访问不同页面，会产生不同的效果。比如普通用户访问后台管理页面会被拒绝，提示无权进入该页面；
 ![无权](https://raw.githubusercontent.com/feiniao111/gallery/master/accessDeny.png)  
 游客访问个人主页，会被提示需要登录，并自动跳转到登录页面。  
@@ -389,7 +593,7 @@ export default {
 // static/global.js
 window.myGlobalClosure = (function () {
   var __object = {
-    vueInst: undefined, // vue示例
+    vueInst: undefined, // vue实例
     i18nLanguage: 'chn'
   }
   return {
@@ -546,4 +750,3 @@ export default [{
 - 组件和样式分离
 - BEM语法
 - 第三方js、jq插件的国际化
-- mock处理规范化
