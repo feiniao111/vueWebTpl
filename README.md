@@ -210,7 +210,7 @@ require('./examples/httpUsage') // 具体内容见上面
 require('./examples/vuexUsage')
 ...
 ```
-采用这种方案，完全不会污染开发环境和生成环境，即执行`npm run dev`和`npm run build`，都不会加载`mockjs`，http请求都能正常地发送和返回。但是，这种方案有一个明显的缺点——mock环境和dev环境来回切换比较麻烦，通过项目比较大，切换时间会比较长。  
+采用这种方案，完全不会污染开发环境和生产环境，即执行`npm run dev`和`npm run build`，都不会加载`mockjs`，http请求都能正常地发送和返回。但是，这种方案有一个明显的缺点——mock环境和dev环境来回切换比较麻烦，如果项目比较大，切换时间会比较长。  
 我们的项目模板，采取一种更灵活的方式，可以快速的在dev环境中启用和关闭mock。该方案的思路是:**在需要时加载mock文件，通过重载页面关闭mock**
 
 **在需要时加载mock文件**  
