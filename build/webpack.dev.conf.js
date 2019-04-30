@@ -12,6 +12,7 @@ const portfinder = require('portfinder')
 const definedVar = 'vueWebTpl' // 动态配置根路径
 const env = require('../config/dev.env')
 const definedEnv = env.NODE_ENV // 'development'
+const httpFake = require('./http.dev.fake')
 
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
@@ -51,7 +52,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     quiet: true, // necessary for FriendlyErrorsPlugin
     watchOptions: {
       poll: config.dev.poll
-    }
+    },
+    before: httpFake
   },
   plugins: [
     new webpack.DefinePlugin({

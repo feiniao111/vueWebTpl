@@ -4,12 +4,13 @@ import {
 } from '../../../lib/locale/index'
 
 const state = {
-  i18nLanguage: 'chn'
-
+  i18nLanguage: 'chn',
+  isMockMode: false
 }
 
 const getters = {
-  i18nLanguage: state => state.i18nLanguage
+  i18nLanguage: state => state.i18nLanguage,
+  isMockMode: state => state.isMockMode
 }
 
 const actions = {
@@ -26,6 +27,12 @@ const mutations = {
     instance.$i18n.locale = lang
     // 更新独立t函数的语言环境
     use(instance.$i18n.messages[lang])
+  },
+  [types.COMMON_SET_IS_MOCK_MODE] (state, bol) {
+    state.isMockMode = bol
+    if (bol) {
+      require('@/apiMock/index.js')
+    }
   }
 }
 

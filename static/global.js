@@ -10,6 +10,7 @@ window.myGlobalClosure = (function () {
   var __object = {
     vueInst: undefined, // vue示例
     i18nLanguage: 'chn',
+    isMockMode: false, // 是否mock模式
     env: 'development', // 当前环境
     role: undefined, // 角色，可用于路由拦截
     token: undefined,
@@ -68,6 +69,27 @@ window.myGlobalClosure = (function () {
     },
     getTokenInvalidCode: function () {
       return __object.tokenInvalidCode
+    },
+    setMockMode: function (bol) {
+      __object.isMockMode = bol
+    },
+    getMockMode: function () {
+      if (__object.isMockMode) {
+        alert('当前处于mock模式')
+      } else {
+        alert('当前处于正常模式')
+      }
+      return __object.isMockMode
+    },
+    openMock: function () {
+      if (__object.vueInst) {
+        __object.vueInst.$store.commit('common/SET_IS_MOCK_MODE', true)
+        this.setMockMode(true)
+      }
+    },
+    cancelMock: function () {
+      // mockjs没有提供关闭方法，只能重新刷新页面
+      location.reload(true)
     }
   }
 })()

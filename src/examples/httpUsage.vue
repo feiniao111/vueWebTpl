@@ -15,6 +15,12 @@
       <button @click="handleGlobConfig">{{$t('page.examples.globalTimeout')}}</button>
       <button @click="handleInterce">{{$t('page.examples.reqInteceptor')}}</button>
     </p>
+
+    <h1>{{$t('page.examples.reqMock')}}</h1>
+    <p>
+      <button @click="openMock">{{$t('page.examples.openMock')}}</button>
+      <button @click="cancelMock">{{$t('page.examples.closeMock')}}</button>
+    </p>
   </section>
 </template>
 
@@ -27,7 +33,7 @@
  */
 import api from '../api/examples/httpUsage.js'
 import config from '../api/config.js'
-require("../apiMock/examples/httpUsage");
+// require("../apiMock/examples/httpUsage");
 export default {
   name: "httpUsage",
   data() {
@@ -118,6 +124,7 @@ export default {
         return new Promise((resolve, reject) => {
           api.getPrice(product)  
             .then(res => {
+              console.log(33, res)
               alert(this.$t('page.examples.goodPrice', {product: product, price: res.data.price}));
               resolve(res.data.price);
             })
@@ -183,6 +190,14 @@ export default {
     handleInterce() {
       config.handleInterce();
       alert(this.$t('page.examples.setSucc'));
+    },
+    openMock() {
+      window.myGlobalClosure.openMock();
+      alert(this.$t('page.examples.openSucc'));
+    },
+    cancelMock() {
+      window.myGlobalClosure.cancelMock();
+      alert(this.$t('page.examples.closeSucc'));
     }
   }
 };
