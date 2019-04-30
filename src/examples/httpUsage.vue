@@ -18,8 +18,8 @@
 
     <h1>{{$t('page.examples.reqMock')}}</h1>
     <p>
-      <button @click="openMock">{{$t('page.examples.openMock')}}</button>
-      <button @click="cancelMock">{{$t('page.examples.closeMock')}}</button>
+      <label><input type="radio" v-model="isMockMode" :value='true'>{{$t('page.examples.openMock')}}</label>
+      <label><input type="radio" v-model="isMockMode" :value='false'>{{$t('page.examples.closeMock')}}</label>
     </p>
   </section>
 </template>
@@ -33,11 +33,21 @@
  */
 import api from '../api/examples/httpUsage.js'
 import config from '../api/config.js'
-// require("../apiMock/examples/httpUsage");
 export default {
   name: "httpUsage",
   data() {
-    return {};
+    return {
+      isMockMode: false
+    };
+  },
+  watch: {
+    isMockMode(val) {
+      if (val) {
+        this.openMock();
+      } else{
+        this.cancelMock();
+      }
+    }
   },
   methods: {
     handleGet() {
