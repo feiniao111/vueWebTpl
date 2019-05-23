@@ -1,4 +1,4 @@
-# myapp
+# myapp(为完待补充)
 
 > 这里存放需要打包发布到npm的组件，以供其他项目使用。如果有多套组件库，可以类似`plug-in-ui-1`创建`plug-in-ui-2`, `plug-in-ui-3`等等。
 
